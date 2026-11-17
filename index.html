@@ -866,24 +866,17 @@ const Musica = (() => {
 })();
 
 /* ===== Marcianitos originales ===== */
-function marcianito(piel, piel2, retraso) {
-  return '<g class="ali-in"><g class="cuerpo">'
-    + '<path d="M-7 -36 Q-11 -45 -16 -49" stroke="' + piel2 + '" stroke-width="2.6" fill="none" stroke-linecap="round"/>'
-    + '<path d="M7 -36 Q11 -45 16 -49" stroke="' + piel2 + '" stroke-width="2.6" fill="none" stroke-linecap="round"/>'
-    + '<circle cx="-16.5" cy="-50" r="3.6" fill="#FFD84D"/><circle cx="16.5" cy="-50" r="3.6" fill="#FFD84D"/>'
-    + '<path d="M-15 -16 Q-22 -17 -25 -23" stroke="' + piel2 + '" stroke-width="4.5" fill="none" stroke-linecap="round"/>'
-    + '<path class="brazo-d" d="M15 -16 Q22 -17 25 -23" stroke="' + piel2 + '" stroke-width="4.5" fill="none" stroke-linecap="round"/>'
-    + '<ellipse cx="-8" cy="-1.5" rx="5.5" ry="3.2" fill="' + piel2 + '"/><ellipse cx="8" cy="-1.5" rx="5.5" ry="3.2" fill="' + piel2 + '"/>'
-    + '<path d="M-17 -5 C-19 -23 -13 -38 0 -38 C13 -38 19 -23 17 -5 C15 0 -15 0 -17 -5 Z" fill="' + piel + '"/>'
-    + '<ellipse cx="0" cy="-9" rx="9" ry="5.5" fill="#fff" opacity=".2"/>'
-    + '<ellipse cx="-6" cy="-31" rx="4" ry="2.4" fill="#fff" opacity=".25"/>'
-    + '<g class="ojos" style="animation-delay:' + retraso + 's"><circle cx="-6.2" cy="-25" r="5.4" fill="#fff"/><circle cx="6.2" cy="-25" r="5.4" fill="#fff"/>'
-    + '<circle cx="-5.4" cy="-24.4" r="2.7" fill="#1B1640"/><circle cx="7" cy="-24.4" r="2.7" fill="#1B1640"/>'
-    + '<circle cx="-4.4" cy="-25.6" r="1" fill="#fff"/><circle cx="8" cy="-25.6" r="1" fill="#fff"/></g>'
-    + '<ellipse cx="-11.5" cy="-17.5" rx="2.6" ry="1.6" fill="#FF8FB1" opacity=".85"/><ellipse cx="11.5" cy="-17.5" rx="2.6" ry="1.6" fill="#FF8FB1" opacity=".85"/>'
-    + '<path class="boca" d="M-4 -16.5 Q0 -12.5 4 -16.5" stroke="#1B1640" stroke-width="1.8" fill="none" stroke-linecap="round"/>'
-    + '<ellipse class="boca-o" cx="0" cy="-15" rx="2.6" ry="3.2" fill="#1B1640"/>'
-    + '</g></g>';
+/* Marcianito «Radar» (diseño propio): piel verde lima, orejas de antena parabólica, pecas y lengua afuera.
+   Los colores que se pasan son los del traje; las botas salen del más oscuro. */
+function oscurece(hex, k) {
+  const n = parseInt(hex.slice(1), 16), m = c => Math.round(c * (1 - k));
+  return '#' + [n >> 16, (n >> 8) & 255, n & 255].map(c => m(c).toString(16).padStart(2, '0')).join('');
+}
+const MARCIANITO = '<ellipse cx="78" cy="238" rx="19" ry="11" fill="__TB__"/><ellipse cx="122" cy="238" rx="19" ry="11" fill="__TB__"/><path d="M62 168 Q44 178 34 196" stroke="__T__" stroke-width="15" fill="none" stroke-linecap="round"/><circle cx="24.4" cy="196.0" r="4.6" fill="#8EDB2E"/><circle cx="21.1" cy="201.7" r="4.6" fill="#8EDB2E"/><circle cx="22.6" cy="208.1" r="4.6" fill="#8EDB2E"/><circle cx="30" cy="203" r="9" fill="#8EDB2E"/><g class="brazo-d"><path d="M138 170 Q156 160 164 140" stroke="__T__" stroke-width="15" fill="none" stroke-linecap="round"/><circle cx="160.7" cy="125.7" r="4.6" fill="#8EDB2E"/><circle cx="166.6" cy="124.0" r="4.6" fill="#8EDB2E"/><circle cx="172.3" cy="126.5" r="4.6" fill="#8EDB2E"/><circle cx="166" cy="133" r="9" fill="#8EDB2E"/></g><path d="M58 165 Q56 150 78 148 L122 148 Q144 150 142 165 L146 214 Q146 232 124 232 L76 232 Q54 232 54 214 Z" fill="__T__"/><path d="M54 210 Q54 232 76 232 L124 232 Q146 232 146 210 Q100 222 54 210 Z" fill="__T2__" opacity=".55"/><rect x="58" y="176" width="84" height="12" fill="#fff" opacity=".9"/><g transform="translate(100 182)"><path d="M0 -14 C7 -8 7 4 5 9 L-5 9 C-7 4 -7 -8 0 -14 Z" fill="__T__"/><circle cx="0" cy="-3" r="3" fill="#fff"/><path d="M-5 3 L-9 11 L-4 9 Z M5 3 L9 11 L4 9 Z" fill="#FFD84D"/><path d="M-3 10 Q0 17 3 10 Z" fill="#FF5A36"/></g><g transform="rotate(-20 36 84)"><ellipse cx="36" cy="84" rx="12" ry="22" fill="#DCE4F2"/><ellipse cx="34" cy="84" rx="7" ry="15" fill="#AEB9CF"/><circle cx="34" cy="84" r="3" fill="#FF5A5A"/></g><g transform="rotate(20 164 84)"><ellipse cx="164" cy="84" rx="12" ry="22" fill="#DCE4F2"/><ellipse cx="166" cy="84" rx="7" ry="15" fill="#AEB9CF"/><circle cx="166" cy="84" r="3" fill="#FF5A5A"/></g><ellipse cx="100" cy="98" rx="64" ry="58" fill="#8EDB2E"/><path d="M38 112 Q100 172 162 112 Q156 154 100 156 Q44 154 38 112 Z" fill="#6DB81C" opacity=".45"/><ellipse cx="78" cy="62" rx="16" ry="8" fill="#fff" opacity=".22"/><g class="ojos" style="animation-delay:__RET__s"><ellipse cx="78" cy="90" rx="15" ry="15" fill="#fff"/><circle cx="80" cy="92" r="9" fill="#1E3A2A"/><circle cx="83" cy="87" r="3" fill="#fff"/><ellipse cx="122" cy="90" rx="15" ry="15" fill="#fff"/><circle cx="124" cy="92" r="9" fill="#1E3A2A"/><circle cx="127" cy="87" r="3" fill="#fff"/></g><circle cx="60" cy="112" r="2" fill="#6DB81C"/><circle cx="66" cy="118" r="2" fill="#6DB81C"/><circle cx="56" cy="119" r="2" fill="#6DB81C"/><circle cx="140" cy="112" r="2" fill="#6DB81C"/><circle cx="134" cy="118" r="2" fill="#6DB81C"/><circle cx="144" cy="119" r="2" fill="#6DB81C"/><g class="boca"><path d="M80 122 Q100 140 120 122" stroke="#1E3A2A" stroke-width="4.5" fill="none" stroke-linecap="round"/><path d="M100 131 Q108 131 107 140 Q100 146 95 139 Q94 132 100 131 Z" fill="#FF7E8A"/></g><ellipse class="boca-o" cx="100" cy="128" rx="8" ry="10" fill="#1E3A2A"/>';
+function marcianito(traje, traje2, retraso) {
+  return '<g class="ali-in"><g class="cuerpo"><g transform="translate(-26 -64.74) scale(.26)">'
+    + MARCIANITO.replaceAll('__TB__', oscurece(traje2, .3)).replaceAll('__T2__', traje2).replaceAll('__T__', traje).replace('__RET__', retraso)
+    + '</g></g></g>';
 }
 $('ali-asoma').innerHTML = marcianito('#FF8A73', '#E2604A', 1.2);
 
@@ -891,7 +884,7 @@ $('ali-asoma').innerHTML = marcianito('#FF8A73', '#E2604A', 1.2);
 const ALIENS = [
   { n: 'Lila', c: '#A07CFF', c2: '#7552E0', x: 116, y: 302 },
   { n: 'Coral', c: '#FF8A73', c2: '#E2604A', x: 180, y: 310 },
-  { n: 'Cielo', c: '#5CC8FF', c2: '#2F9BD6', x: 244, y: 300 },
+  { n: 'Rosa', c: '#FF8FB1', c2: '#E0638C', x: 244, y: 300 },
   { n: 'Sol', c: '#FFC93C', c2: '#E0A21A', x: 304, y: 308 }
 ];
 const RIEL = { min: 96, max: 316, centro: 206, amplitud: 96 }, Y_REPOSO = 104, SALIDA_X = 54, BANDEJA_Y = 416, AGARRE = 68;
@@ -1106,7 +1099,7 @@ $('inv').addEventListener('click', () => { abre($('d-zoom')); marca('m2'); });
 /* ===== Pase de abordar: la confirmación se llena aquí mismo y viaja al flujo de n8n, sin salir de la página ===== */
 const Pase = (() => {
   const f = $('pase'), nom = $('p-nombre'), eda = $('p-edades'), adu = $('p-adulto'), btn = $('confirmar');
-  const COL = [['#A07CFF', '#7552E0'], ['#5CC8FF', '#2F9BD6'], ['#FFC93C', '#E0A21A']];
+  const COL = [['#A07CFF', '#7552E0'], ['#FF8FB1', '#E0638C'], ['#FFC93C', '#E0A21A']];
   const t0 = Date.now(); let herm = 0, enviando = false;
   const va = () => f.elements.asiste.value !== 'no';
   const limpia = (v, n) => String(v || '').replace(/[<>]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, n);

@@ -14,6 +14,7 @@ Invitación web al cumpleaños 6 de Gaetano: sábado 5 de diciembre de 2026, 11:
 | `img/invitacion.jpg` | La invitación (Misión 2). |
 | `img/base.jpg` | Foto de la Misión 3. |
 | `img/te-espero.jpg` | Foto de la Misión 4. |
+| `audio/musica.mp3` | La canción de fondo (suena en bucle desde que se abre la invitación). |
 | `robots.txt` | Pide a los buscadores que no muestren la página. |
 
 ## Cómo está armada la página
@@ -27,7 +28,9 @@ Después vienen cuatro misiones, de arriba hacia abajo:
 3. **Llega a la base a tiempo:** cuenta regresiva, botón «Cómo llegar» (Google Maps) y el plan de la fiesta.
 4. **Confirma a tu tripulación:** el «pase de abordar». El invitado lo llena ahí mismo (nombre, si van, cuántos hermanitos y quién acompaña) y lo envía sin salir de la página. Al enviarlo sale la celebración «¡Te esperamooos!» con el cohete y el confeti, y el pase queda sellado como «Confirmado».
 
-La música y los efectos se generan en el navegador (Web Audio); no hay archivos de audio.
+La música de fondo es `audio/musica.mp3`. Los efectos (pitidos, despegue, garra) se generan en el navegador con Web Audio.
+
+En iPhone el navegador solo deja sonar un audio que arrancó con un toque. Por eso la canción arranca en silencio al tocar «Abrir mensaje» y se le quita el silencio al terminar la cuenta regresiva. La lógica está en `const Musica`.
 
 ## Cambios frecuentes
 
@@ -35,6 +38,7 @@ La música y los efectos se generan en el navegador (Web Audio); no hay archivos
 - **Horarios del plan:** busca `<ol class="plan"`.
 - **Textos de la portada:** busca `id="titular"` y la función `aplicaNombre`.
 - **Fotos:** reemplaza los archivos de `img/` con el mismo nombre.
+- **Música:** reemplaza `audio/musica.mp3` por otra canción con el mismo nombre. Conviene MP3 de 128 kbps (unos 2,5 MB para 2,5 minutos) para que cargue rápido en el celular.
 
 ## Enlace con el nombre de cada invitado
 

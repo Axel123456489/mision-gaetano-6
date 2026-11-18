@@ -631,7 +631,7 @@ body.revelada .poster{animation:aparece .9s cubic-bezier(.2,1.3,.4,1)}
       <div class="pase-cuerpo" id="pase-campos">
         <div class="pc">
           <label for="p-nombre">Tripulante <small>niño o niña invitado</small></label>
-          <input type="text" id="p-nombre" name="nombre" maxlength="40" placeholder="Ej.: Mateo" autocapitalize="words" enterkeyhint="done" aria-describedby="e-nombre">
+          <input type="text" id="p-nombre" name="nombre" maxlength="40" placeholder="Nombre y apellido" autocapitalize="words" enterkeyhint="done" aria-describedby="e-nombre">
           <p class="pase-err" id="e-nombre" role="alert" hidden>Escribe el nombre del invitado.</p>
         </div>
         <fieldset class="pc">
@@ -763,9 +763,11 @@ function tween(ms, fn, ease = suave) {
 }
 function ir(id, bloque = 'start') { $(id).scrollIntoView({ behavior: reducir ? 'auto' : 'smooth', block: bloque }); }
 
-/* ===== Nombre del invitado: se agrega al final del enlace, p. ej. …#Mateo o …#Maria-Jose ===== */
+/* ===== Saludo general (versión 8, 18-nov): la invitación ya NO toma el nombre del enlace. Se compartió un enlace de ejemplo
+   que terminaba en «#Mateo» y a todos los saludaba como Mateo. Ahora el saludo es para cualquiera; el nombre lo escribe cada
+   familia en el pase de abordar. leeNombreDelEnlace queda solo como referencia, no se usa. ===== */
 let NOMBRE = '';
-function leeNombre() {
+function leeNombreDelEnlace() {
   let h = ''; try { h = decodeURIComponent(location.hash.slice(1)); } catch (e) {}
   const reserv = ['settings', 'sidebar', 'customize', 'upgrade', 'downloads', 'm1', 'm2', 'm3', 'm4'];
   if (!h || reserv.includes(h.toLowerCase()) || /^comment-/i.test(h)) return '';
@@ -774,12 +776,9 @@ function leeNombre() {
   return h.split(' ').filter(Boolean).map(w => w[0].toUpperCase() + w.slice(1).toLowerCase()).join(' ');
 }
 function aplicaNombre() {
-  NOMBRE = leeNombre();
-  // El nombre se recuerda en este teléfono.
-  try {
-    if (NOMBRE) localStorage.setItem('mg6_nombre', NOMBRE);
-    else NOMBRE = (localStorage.getItem('mg6_nombre') || '').replace(/[^A-Za-zÁÉÍÓÚÜÑáéíóúüñ ]/g, '').slice(0, 24);
-  } catch (e) {}
+  NOMBRE = '';
+  // Las versiones anteriores recordaban el nombre en el teléfono (a muchos les quedó «Mateo»): se olvida.
+  try { localStorage.removeItem('mg6_nombre'); } catch (e) {}
   $('intro-t').textContent = NOMBRE ? 'Mensaje para ' + NOMBRE : 'Tienes un mensaje';
   $('titular').textContent = '¡' + (NOMBRE || 'Guardián') + ', el Comando Estelar te necesita!';
   $('bocadillo').textContent = NOMBRE ? '¡Te espero, ' + NOMBRE + '!' : '¡Te espero!';

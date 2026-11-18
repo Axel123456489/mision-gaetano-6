@@ -9,8 +9,8 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="Misión Gaetano 6">
 <meta property="og:description" content="Estás invitado al cumpleaños 6 de Gaetano. Sábado 5 de diciembre, 11:00 a. m. Rescata a un marcianito y abre tu invitación.">
-<meta property="og:image" content="https://axel123456489.github.io/mision-gaetano-6/img/portada.jpg">
-<meta property="og:url" content="https://axel123456489.github.io/mision-gaetano-6/">
+<meta property="og:image" content="https://gaetano.gofest.us/img/portada.jpg">
+<meta property="og:url" content="https://gaetano.gofest.us/">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='5' fill='%230B1238'/%3E%3Cpath fill='%23FFD84D' d='M12 3.5l2.4 5.3 5.8.6-4.4 3.8 1.3 5.7L12 16l-5.1 2.9 1.3-5.7L3.8 9.4l5.8-.6z'/%3E%3C/svg%3E">
 <style>img{max-width:100%}</style>
 <title>Misión Gaetano 6</title>
@@ -74,12 +74,34 @@ h1{margin:0;font-family:var(--f-dis);font-weight:400;font-size:clamp(1.5rem,7vw,
 .nota-musica svg{width:16px;height:16px}
 
 /* Misiones */
-.sec{display:flex;flex-direction:column;gap:14px;scroll-margin-top:12px}
+.sec{display:flex;flex-direction:column;gap:14px;scroll-margin-top:62px}
 .chip-m{align-self:flex-start;font-family:var(--f-dis);font-size:.7rem;letter-spacing:.1em;color:#141433;background:var(--estrella);padding:5px 12px;border-radius:999px}
 h2{margin:0;font-family:var(--f-dis);font-weight:400;font-size:1.5rem;line-height:1.08;text-wrap:balance}
+h2[tabindex]:focus{outline:none}h2[tabindex]:focus-visible{outline:3px solid var(--estrella);outline-offset:4px;border-radius:6px}
 h3{margin:0;font-family:var(--f-dis);font-weight:400;font-size:1.05rem;letter-spacing:.02em;display:flex;align-items:center;gap:10px}
 h3 svg{width:20px;height:20px;color:var(--estrella);flex:none}
 .guia{margin:0;color:var(--tinta-2);text-align:center;font-size:.95rem;text-wrap:balance}
+
+/* Paso a paso: cada misión se abre al completar la anterior (sin JavaScript, o si algo falla, se ve todo) */
+.pasos .cerrada{display:none}
+.sec.recien{animation:abremision .7s cubic-bezier(.16,1,.3,1)}
+@keyframes abremision{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+.cand{display:none}
+.ruta button.bloq{border-style:dashed;background:transparent;color:var(--tinta-2)}
+.ruta button.bloq b{display:none}
+.ruta button.bloq .cand{display:block;width:15px;height:15px;margin:3px 0 4px;opacity:.85}
+.sigue{width:100%;margin-top:4px}
+.sigue.hecha{background:transparent;color:var(--tinta);box-shadow:inset 0 0 0 2px var(--borde)}
+.tope{appearance:none;width:100%;display:flex;align-items:center;gap:14px;text-align:left;cursor:pointer;color:var(--tinta-2);font:700 .95rem/1.3 var(--f-txt);
+  background:rgba(255,255,255,.04);border:2px dashed var(--borde);border-radius:20px;padding:14px 18px;-webkit-tap-highlight-color:transparent}
+.tope .cand{display:block;flex:none;width:30px;height:30px;color:var(--estrella);transform-origin:50% 30%}
+.tope b{display:block;font-family:var(--f-dis);font-weight:400;font-size:.92rem;letter-spacing:.04em;color:var(--tinta);margin-bottom:2px}
+.tope i{display:block;font-style:normal}
+.tope.late .cand{animation:candado .5s ease-in-out 2}
+@keyframes candado{0%,100%{transform:rotate(0)}25%{transform:rotate(-16deg)}75%{transform:rotate(16deg)}}
+.tope:focus-visible{outline:3px solid var(--estrella);outline-offset:3px}
+.ojo{animation:ojo .55s ease-in-out 3;outline:3px solid var(--estrella);outline-offset:5px}
+@keyframes ojo{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
 
 /* Máquina de garra */
 .maquina{position:relative;width:min(100%,400px,max(230px,calc((100svh - 290px)*.818)));margin:0 auto;cursor:pointer;border-radius:26px;touch-action:pan-y;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
@@ -178,9 +200,27 @@ h3 svg{width:20px;height:20px;color:var(--estrella);flex:none}
 .musica .off{display:none}.musica[aria-pressed="false"] .on{display:none}.musica[aria-pressed="false"] .off{display:block}
 .lluvia{position:fixed;inset:0;pointer-events:none;z-index:30}
 
+/* Voz de Gaetano: lo que dice aparece escrito abajo (sirve también con el celular en silencio) */
+.voz-g{position:fixed;z-index:80;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));width:max-content;max-width:min(calc(100vw - 32px),440px);
+  display:flex;align-items:center;gap:14px;padding:12px 20px 12px 16px;border-radius:20px;background:#141B4F;color:var(--tinta);
+  box-shadow:0 0 0 2px var(--lima),0 20px 44px -14px rgba(0,0,0,.75);transform:translateX(-50%);animation:vozentra .4s cubic-bezier(.16,1,.3,1);
+  pointer-events:none}   /* el subtítulo no tapa los toques: lo que hay debajo se puede tocar */
+.voz-g.sale{opacity:0;transform:translate(-50%,10px);transition:opacity .25s ease,transform .25s ease}
+.voz-g small{display:block;font-family:var(--f-dis);font-size:.68rem;letter-spacing:.14em;color:var(--lima);line-height:1.2}
+.voz-g p{margin:2px 0 0;font-weight:900;font-size:1.08rem;line-height:1.25;text-wrap:balance}
+@keyframes vozentra{from{opacity:0;transform:translate(-50%,16px)}to{opacity:1;transform:translateX(-50%)}}
+.ondas{display:flex;align-items:center;gap:3px;height:24px;flex:none}
+.ondas i{display:block;width:4px;height:100%;border-radius:2px;background:var(--lima);transform:scaleY(.28)}
+.hablando .ondas i{animation:vozbarra .8s ease-in-out infinite}
+.hablando .ondas i:nth-child(2){animation-delay:-.2s}.hablando .ondas i:nth-child(3){animation-delay:-.45s}.hablando .ondas i:nth-child(4){animation-delay:-.1s}
+@keyframes vozbarra{0%,100%{transform:scaleY(.28)}50%{transform:scaleY(1)}}
+.voz-btn{align-self:center;gap:12px;margin-top:6px}
+.solo-lector{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.voz-btn .ondas{height:18px}.voz-btn .ondas i{width:3px}
+
 /* Diálogos */
 dialog{border:0;padding:0;background:transparent;color:var(--tinta);max-width:min(520px,100vw);width:100%;max-height:100%}
-dialog::backdrop{background:rgba(5,8,28,.76);backdrop-filter:blur(3px)}
+dialog::backdrop{background:rgba(5,8,28,.76);backdrop-filter:blur(3px);transition:background .35s ease}
 .hoja{background:#121A4E;border:1px solid var(--borde);border-radius:24px;margin:max(12px,env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) max(12px,env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px));
   padding:22px 20px 20px;display:flex;flex-direction:column;gap:16px;max-height:calc(100svh - 24px);overflow:auto}
 .hoja-cab{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
@@ -208,16 +248,35 @@ input[type=text]:focus{outline:2px solid var(--estrella);outline-offset:1px;bord
 .zoom img{width:100%;height:auto;border-radius:14px;display:block}
 
 /* Premio: el marcianito entrega el sobre */
-.premio .hoja{align-items:center;text-align:center;gap:10px;padding-top:18px;overflow:visible}
-.premio-ali{width:96px;height:92px;overflow:visible}
+.premio .hoja{position:relative;align-items:center;text-align:center;gap:10px;padding-top:18px;overflow:visible}
+.charla{display:flex;align-items:flex-end;gap:4px;width:100%;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.premio-ali{flex:none;width:112px;height:104px;overflow:visible;animation:alientra .55s cubic-bezier(.2,1.5,.4,1)}
+@keyframes alientra{from{transform:translateY(46px) scale(.3);opacity:0}to{transform:none;opacity:1}}
+.premio-ali .brazo-d{animation:saluda .32s ease-in-out infinite alternate}
+.premio .globo-p{flex:1;min-width:0;max-width:none;min-height:calc(3.9em + 26px);display:flex;align-items:center;margin:0 0 30px;padding:12px 14px;text-align:left;background:#fff;color:#1B1640;font-weight:900;font-size:1.02rem;line-height:1.3;border-radius:18px 18px 18px 4px;box-shadow:0 10px 24px -8px rgba(0,0,0,.6)}
+.ali.hablando .boca{animation:bocab .22s steps(1) infinite}
+.ali.hablando .boca-o{animation:bocao .22s steps(1) infinite}
+@keyframes bocab{0%{opacity:1}50%{opacity:0}}
+@keyframes bocao{0%{opacity:0}50%{opacity:1}}
+.premio-cielo{position:fixed;inset:0;overflow:hidden;pointer-events:none}
+/* La invitación sale del sobre, se muestra grande y vuela a su lugar en la Misión 2 */
+.premio .hoja{transition:opacity .35s ease}
+.premio.vuelo .hoja{opacity:0}
+.premio.vuelo::backdrop{background:rgba(5,8,28,.94)}
+.inv-vuelo{position:fixed;z-index:89;max-width:none;background:#fff;border-radius:16px;cursor:pointer;will-change:transform;box-shadow:0 0 0 4px rgba(255,255,255,.92),0 28px 60px -18px rgba(0,0,0,.75)}
+.velo-vuelo{position:fixed;inset:0;z-index:88;background:rgba(5,8,28,.94)}
+.inv.en-vuelo{opacity:0}
 .premio h2{font-size:1.5rem;color:var(--estrella)}
 .premio p{margin:0;color:var(--tinta-2);font-weight:700;max-width:30ch}
-.sobre{position:relative;width:230px;height:150px;margin:74px auto 10px;background:#CFC7FF;border-radius:12px;perspective:700px}
-.sobre-carta{position:absolute;left:16px;right:16px;top:10px;height:128px;background:#fff;border-radius:8px;color:#1B1640;display:flex;flex-direction:column;align-items:center;padding-top:12px;gap:0;z-index:1;box-shadow:0 4px 10px rgba(0,0,0,.25);transition:transform .8s cubic-bezier(.3,1.5,.5,1) .5s}
-.sobre-carta span{font-family:var(--f-dis);font-size:1.3rem;line-height:1.1;color:#3E8F1B}
-.sobre-carta b{font-family:var(--f-dis);font-weight:400;font-size:.95rem}
-.sobre-carta i{font-style:normal;font-weight:900;font-size:.8rem;color:#C2274B}
-.sobre.abierto .sobre-carta{transform:translateY(-70px) rotate(-3deg)}
+.sobre{position:relative;width:230px;height:150px;margin:74px auto 10px;background:#CFC7FF;border-radius:12px;perspective:700px;transition:opacity .3s ease,filter .3s ease,transform .45s cubic-bezier(.2,1.6,.4,1)}
+.sobre.oculto{opacity:.3;transform:scale(.84);filter:saturate(.5);pointer-events:none}   /* el sobre espera apagado hasta que el marcianito anuncia el premio */
+.premio #abrir-inv[hidden]{display:inline-flex!important;visibility:hidden}   /* guarda su lugar: la ventana no salta cuando aparece */
+.sobre.listo{cursor:pointer;animation:sobrelate 1.3s ease-in-out infinite}
+.sobre.listo::after{content:"";position:absolute;inset:-8px;border-radius:18px;box-shadow:0 0 0 3px rgba(255,216,77,.6),0 0 28px rgba(255,216,77,.45);pointer-events:none}
+@keyframes sobrelate{0%,100%{transform:rotate(-2deg) scale(1)}50%{transform:rotate(2deg) scale(1.05)}}
+.sobre-carta{position:absolute;left:16px;right:16px;top:10px;height:128px;overflow:hidden;background:#fff;border-radius:8px;z-index:1;box-shadow:0 4px 10px rgba(0,0,0,.25);transition:transform .6s cubic-bezier(.3,1.4,.5,1) .4s}
+.sobre-carta img{display:block;width:100%;height:auto}   /* dentro del sobre va la invitación de verdad (se ve su parte de arriba) */
+.sobre.abierto .sobre-carta{transform:translateY(-86px)}
 .sobre-frente{position:absolute;inset:0;z-index:2;border-radius:12px;background:linear-gradient(180deg,#B5A9FF,#9B8CF5);clip-path:polygon(0 0,50% 56%,100% 0,100% 100%,0 100%)}
 .sobre-solapa{position:absolute;left:0;right:0;top:0;height:60%;z-index:3;background:#8A79EE;clip-path:polygon(0 0,100% 0,50% 100%);transform-origin:50% 0;transition:transform .5s ease,z-index 0s .25s}
 .sobre.abierto .sobre-solapa{transform:rotateX(180deg);z-index:0}
@@ -253,6 +312,12 @@ body.con-intro{overflow:hidden}
 .intro.contando .radar i{animation-duration:.7s}
 .intro.contando .cohete-i{animation:tiembla .09s linear infinite}
 @keyframes tiembla{0%{transform:translate(-2px,1px) rotate(-1deg)}50%{transform:translate(2px,-1px) rotate(1deg)}100%{transform:translate(-1px,2px) rotate(0)}}
+.cuenta-i.frase{font-size:clamp(1.5rem,8.2vw,2.8rem);line-height:1.12;padding:0 14px;text-wrap:balance}
+.cuenta-i.pop{animation:frase .45s cubic-bezier(.2,1.6,.4,1)}
+@keyframes frase{from{transform:scale(.55) translateY(16px);opacity:0}to{transform:none;opacity:1}}
+.intro.motores .cohete-i{animation:tiembla .06s linear infinite}
+.intro.motores .llama{animation:llama2 .08s linear infinite alternate}
+.intro.motores .intro-c{animation:tiembla .12s linear infinite}
 .intro.despegando .cohete-i{animation:despega 1.1s cubic-bezier(.5,0,.9,.4) forwards}
 @keyframes despega{0%{transform:translateY(0) scale(1)}15%{transform:translateY(14px) scale(1.04)}100%{transform:translateY(-130vh) scale(1.5)}}
 .intro.despegando .llama{animation:llama2 .08s linear infinite alternate}
@@ -261,6 +326,7 @@ body.con-intro{overflow:hidden}
 .intro.despegando .intro-c{animation:tiembla .08s linear 6}
 .destello{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;transition:opacity .25s ease}
 .intro.blanco .destello{opacity:1}
+@media (max-height:540px){.intro-c{gap:5px;padding:8px 24px}.radar{width:104px;height:104px}.cohete-i{width:42px}.tx{font-size:.68rem}.intro-t{font-size:1.35rem}.intro-s{margin:0;font-size:.9rem}.intro .btn{min-height:44px}.saltar{padding:4px 10px}.cuenta-i{top:calc(50% + 30px)}}
 body.revelada .poster{animation:aparece .9s cubic-bezier(.2,1.3,.4,1)}
 @keyframes aparece{from{transform:scale(1.22);opacity:0}to{transform:none;opacity:1}}
 
@@ -376,6 +442,9 @@ body.revelada .poster{animation:aparece .9s cubic-bezier(.2,1.3,.4,1)}
   var i = document.getElementById('intro');
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) i.hidden = true;
   else document.body.classList.add('con-intro');
+  // Paso a paso: las misiones se abren una por una. Si la página tuviera un error, se abre todo: nadie se queda sin confirmar.
+  document.documentElement.classList.add('pasos');
+  ['error', 'unhandledrejection'].forEach(function (t) { addEventListener(t, function () { document.documentElement.classList.remove('pasos'); }); });
 })();
 </script>
 
@@ -405,10 +474,10 @@ body.revelada .poster{animation:aparece .9s cubic-bezier(.2,1.3,.4,1)}
     </div>
     <p class="bajada">Gaetano cumple <span class="seis">6</span> y arma su tripulación. Completa las 4 misiones.</p>
     <ol class="ruta" aria-label="Las 4 misiones">
-      <li><button type="button" data-ir="m1"><b>1</b>Rescata</button></li>
-      <li><button type="button" data-ir="m2"><b>2</b>Lee</button></li>
-      <li><button type="button" data-ir="m3"><b>3</b>Llega</button></li>
-      <li><button type="button" data-ir="m4"><b>4</b>Confirma</button></li>
+      <li><button type="button" data-ir="m1"><b>1</b><svg class="cand" viewBox="0 0 24 24" fill="currentColor" fill-rule="evenodd" aria-hidden="true"><path d="M7 10V8a5 5 0 0 1 10 0v2h.5a2.5 2.5 0 0 1 2.5 2.5v6a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 18.5v-6A2.5 2.5 0 0 1 6.5 10H7Zm2.2 0h5.6V8a2.8 2.8 0 0 0-5.6 0v2Z"/></svg>Rescata</button></li>
+      <li><button type="button" data-ir="m2"><b>2</b><svg class="cand" viewBox="0 0 24 24" fill="currentColor" fill-rule="evenodd" aria-hidden="true"><path d="M7 10V8a5 5 0 0 1 10 0v2h.5a2.5 2.5 0 0 1 2.5 2.5v6a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 18.5v-6A2.5 2.5 0 0 1 6.5 10H7Zm2.2 0h5.6V8a2.8 2.8 0 0 0-5.6 0v2Z"/></svg>Lee</button></li>
+      <li><button type="button" data-ir="m3"><b>3</b><svg class="cand" viewBox="0 0 24 24" fill="currentColor" fill-rule="evenodd" aria-hidden="true"><path d="M7 10V8a5 5 0 0 1 10 0v2h.5a2.5 2.5 0 0 1 2.5 2.5v6a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 18.5v-6A2.5 2.5 0 0 1 6.5 10H7Zm2.2 0h5.6V8a2.8 2.8 0 0 0-5.6 0v2Z"/></svg>Llega</button></li>
+      <li><button type="button" data-ir="m4"><b>4</b><svg class="cand" viewBox="0 0 24 24" fill="currentColor" fill-rule="evenodd" aria-hidden="true"><path d="M7 10V8a5 5 0 0 1 10 0v2h.5a2.5 2.5 0 0 1 2.5 2.5v6a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 18.5v-6A2.5 2.5 0 0 1 6.5 10H7Zm2.2 0h5.6V8a2.8 2.8 0 0 0-5.6 0v2Z"/></svg>Confirma</button></li>
     </ol>
     <button class="btn btn-lima aceptar" id="aceptar" type="button">
       <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z"/></svg>
@@ -418,9 +487,9 @@ body.revelada .poster{animation:aparece .9s cubic-bezier(.2,1.3,.4,1)}
   </header>
 
   <!-- Misión 1 -->
-  <section class="sec" id="m1" aria-labelledby="t-m1">
+  <section class="sec cerrada" id="m1" aria-labelledby="t-m1">
     <span class="chip-m">Misión 1 de 4</span>
-    <h2 id="t-m1">Rescata a un marcianito</h2>
+    <h2 id="t-m1" tabindex="-1">Rescata a un marcianito</h2>
     <div class="maquina" id="maquina" tabindex="0" role="group" aria-label="Máquina de garra. Flechas para mover, espacio para soltar.">
       <svg class="planeta" viewBox="0 0 100 100" aria-hidden="true">
         <defs><linearGradient id="pl" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF9F7A"/><stop offset="1" stop-color="#C2408A"/></linearGradient></defs>
@@ -497,19 +566,21 @@ body.revelada .poster{animation:aparece .9s cubic-bezier(.2,1.3,.4,1)}
   </section>
 
   <!-- Misión 2 -->
-  <section class="sec" id="m2" aria-labelledby="t-m2">
+  <section class="sec cerrada" id="m2" aria-labelledby="t-m2">
     <span class="chip-m">Misión 2 de 4</span>
-    <h2 id="t-m2">Lee tu invitación</h2>
+    <h2 id="t-m2" tabindex="-1">Lee tu invitación</h2>
     <button class="inv" id="inv" type="button" aria-label="Ver la invitación en grande">
       <img src="img/invitacion.jpg" width="1159" height="1635" alt="Invitación: Gaetano cumple 6. Estás invitado por el Comando Estelar. Plan de la misión desde las 11:00 a. m.">
       <span class="ver-grande">Toca para ampliar</span>
     </button>
+    <button class="btn btn-linea voz-btn" id="voz-m2" type="button"><span class="ondas" aria-hidden="true"><i></i><i></i><i></i><i></i></span>Escucha a Gaetano</button>
+    <button class="btn btn-lima sigue" id="sigue-m2" type="button">¡Leída! Siguiente misión<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg></button>
   </section>
 
   <!-- Misión 3 -->
-  <section class="sec" id="m3" aria-labelledby="t-m3">
+  <section class="sec cerrada" id="m3" aria-labelledby="t-m3">
     <span class="chip-m">Misión 3 de 4</span>
-    <h2 id="t-m3">Llega a la base a tiempo</h2>
+    <h2 id="t-m3" tabindex="-1">Llega a la base a tiempo</h2>
     <div class="escena base">
       <img src="img/base.jpg" width="880" height="880" loading="lazy" alt="El cumpleañero levanta el pulgar frente a la base espacial">
       <div class="velo"></div>
@@ -540,12 +611,13 @@ body.revelada .poster{animation:aparece .9s cubic-bezier(.2,1.3,.4,1)}
       <li><span class="hora h4c">12:30 PM</span><p>Refrigerio para todos</p></li>
       <li><span class="hora h5c">1:00 PM</span><p>Inicio del show infantil</p></li>
     </ol>
+    <button class="btn btn-lima sigue" id="sigue-m3" type="button">¡Anotado! Última misión<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg></button>
   </section>
 
   <!-- Misión 4 -->
-  <section class="sec" id="m4" aria-labelledby="t-m4">
+  <section class="sec cerrada" id="m4" aria-labelledby="t-m4">
     <span class="chip-m">Misión 4 de 4</span>
-    <h2 id="t-m4">Confirma a tu tripulación</h2>
+    <h2 id="t-m4" tabindex="-1">Confirma a tu tripulación</h2>
     <div class="escena espero">
       <img src="img/te-espero.jpg" width="880" height="880" loading="lazy" alt="El cumpleañero con su traje de guardián espacial levanta el pulgar">
       <span class="bocadillo" id="bocadillo">¡Te espero!</span>
@@ -617,9 +689,19 @@ body.revelada .poster{animation:aparece .9s cubic-bezier(.2,1.3,.4,1)}
     <div class="mini"><a id="calendario" href="#" target="_blank" rel="noopener" hidden>Agregar a mi calendario</a></div>
   </section>
 
-  <p class="pie">Tu puntualidad nos salvará y estaremos agradecidos.<br><b>Comando Estelar</b></p>
+  <button class="tope" id="tope" type="button" hidden>
+    <svg class="cand" viewBox="0 0 24 24" fill="currentColor" fill-rule="evenodd" aria-hidden="true"><path d="M7 10V8a5 5 0 0 1 10 0v2h.5a2.5 2.5 0 0 1 2.5 2.5v6a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 18.5v-6A2.5 2.5 0 0 1 6.5 10H7Zm2.2 0h5.6V8a2.8 2.8 0 0 0-5.6 0v2Z"/></svg>
+    <span><b id="tope-t"></b><i id="tope-p"></i></span>
+  </button>
+
+  <p class="pie cerrada">Tu puntualidad nos salvará y estaremos agradecidos.<br><b>Comando Estelar</b></p>
 </main>
 
+<p class="solo-lector" id="voz-anuncio" aria-live="polite"></p>
+<div class="voz-g" id="voz-g" aria-hidden="true" hidden>
+  <span class="ondas" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+  <div><small>Transmisión de Gaetano</small><p id="voz-g-t"></p></div>
+</div>
 <button class="musica" id="musica" type="button" aria-pressed="true" aria-label="Música" hidden>
   <svg class="on" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4V9Zm12.5-1.5a6 6 0 0 1 0 9l-1.4-1.4a4 4 0 0 0 0-6.2l1.4-1.4Z"/></svg>
   <svg class="off" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4V9Zm11.3.7 1.4-1.4L19 10.6l2.3-2.3 1.4 1.4-2.3 2.3 2.3 2.3-1.4 1.4-2.3-2.3-2.3 2.3-1.4-1.4 2.3-2.3-2.3-2.3Z"/></svg>
@@ -627,17 +709,20 @@ body.revelada .poster{animation:aparece .9s cubic-bezier(.2,1.3,.4,1)}
 
 <dialog id="d-premio" class="premio" aria-labelledby="t-premio">
   <div class="hoja">
-    <svg class="premio-ali" viewBox="-34 -58 68 62" aria-hidden="true"><g id="ali-premio" class="ali feliz"></g></svg>
     <h2 id="t-premio">¡Misión cumplida!</h2>
-    <p id="premio-txt">Te traigo un mensaje del Comando Estelar.</p>
-    <div class="sobre" id="sobre" aria-hidden="true">
-      <div class="sobre-carta"><span>Gaetano</span><b>cumple 6</b><i>¡Estás invitado!</i></div>
+    <div class="charla" id="charla">
+      <svg class="premio-ali" viewBox="-34 -58 68 62" aria-hidden="true"><g id="ali-premio" class="ali"></g></svg>
+      <p class="globo-p" id="premio-txt" aria-hidden="true"></p>
+    </div>
+    <div class="sobre oculto" id="sobre" aria-hidden="true">
+      <div class="sobre-carta"><img src="img/invitacion.jpg" width="1159" height="1635" alt=""></div>
       <div class="sobre-frente"></div>
       <div class="sobre-solapa"></div>
       <svg class="sello" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5l2.7 6 6.5.6-4.9 4.3 1.5 6.4L12 16.5 6.2 19.8l1.5-6.4L2.8 9.1l6.5-.6L12 2.5Z"/></svg>
     </div>
-    <button class="btn btn-lima" id="abrir-inv" type="button">Abrir mi invitación</button>
+    <button class="btn btn-lima" id="abrir-inv" type="button" hidden>¡Sí, quiero verla!</button>
   </div>
+  <div class="premio-cielo" id="premio-cielo" aria-hidden="true"></div>
 </dialog>
 
 
@@ -655,7 +740,10 @@ const FIESTA = {
   lugar: '',                   // nombre del local
   destino: '-16.4153996,-71.5606689',
   fachada: 'https://maps.app.goo.gl/TRuzWMEhuGGWNXZQ8',
-  confirmar: 'https://n8n.mygisselle.com/webhook/gaetano-6-rsvp'   // adonde viaja la confirmación (flujo de n8n). Vacío = modo prueba: no envía nada
+  confirmar: 'https://n8n.mygisselle.com/webhook/gaetano-6-rsvp',  // adonde viaja la confirmación (flujo de n8n). Vacío = modo prueba: no envía nada
+  // Despegue de la intro: grabación de Gaetano diciendo «¡Al infinito… y más allá!» (p. ej. 'audio/gaetano-infinito.mp3').
+  // Vacío = la frase sale solo escrita. `corte` = segundo de la grabación en que empieza «…y más allá» (ahí despega el cohete).
+  vozDespegue: '', vozDespegueCorte: 1.3
 };
 
 const $ = id => document.getElementById(id);
@@ -764,8 +852,14 @@ pinta(); setInterval(pinta, 1000);
 
 /* ===== Música (archivo audio/musica.mp3) y efectos (se generan en el navegador) ===== */
 const Musica = (() => {
-  let ac, master, pista, sonando = false, activo = true, primera = true, silencio;
+  let ac, master, pista, sonando = false, activo = true, primera = true, silencio, amb = null;
+  // Voces reales de Gaetano (notas de voz de la familia), limpias y ya al volumen final (−14 LUFS, pico −1 dB).
+  const VOCES = { hola: 'audio/gaetano-hola.mp3', gracias: 'audio/gaetano-gracias.mp3', rescate: 'audio/gaetano-rescate.mp3' };
+  if (FIESTA.vozDespegue) VOCES.infinito = FIESTA.vozDespegue;
+  const vozProm = {}; let vozSrc, agachada = 0, volFijo, volTimer;
   const hz = m => 440 * Math.pow(2, (m - 69) / 12);
+  const calla = r => { if (r && r.catch) r.catch(() => {}); };          // una promesa que falla aquí no debe romper nada
+  const despierta = () => { try { calla(ac.resume()); } catch (e) {} };
   function voz(t, m, dur, tipo, vol, ataque = .006, desafina = 0) {
     const o = ac.createOscillator(), g = ac.createGain();
     o.type = tipo; o.frequency.setValueAtTime(hz(m), t); o.detune.value = desafina;
@@ -780,6 +874,28 @@ const Musica = (() => {
     return pista;
   }
   function toca(p) { const r = p.play(); if (r && r.catch) r.catch(() => {}); return r; }
+  function decodifica(buf) { return new Promise((ok, mal) => { try { const r = ac.decodeAudioData(buf, ok, mal); if (r && r.then) r.then(ok, mal); } catch (e) { mal(e); } }); }
+  function cargaVoz(n) {         // cada voz por separado: si una falla o tarda, las demás no esperan
+    if (!vozProm[n]) vozProm[n] = fetch(VOCES[n]).then(r => r.ok ? r.arrayBuffer() : Promise.reject()).then(decodifica).catch(() => null);
+    return vozProm[n];
+  }
+  function cargaVoces() { Object.keys(VOCES).forEach(cargaVoz); }
+  // Mientras habla Gaetano la canción sigue sonando, más bajita. En iPhone el volumen de un audio no se puede cambiar:
+  // ahí la canción no se toca y la voz suena un poco más fuerte.
+  function rampa(p, a, ms) {
+    clearInterval(volTimer); const v0 = p.volume, t0 = performance.now();
+    volTimer = setInterval(() => { const k = Math.min(1, (performance.now() - t0) / ms); p.volume = v0 + (a - v0) * k; if (k >= 1) clearInterval(volTimer); }, 30);
+  }
+  function agacha(on) {
+    const p = pista;
+    if (on) {
+      if (!p || p.paused || p.muted) return;
+      if (volFijo === undefined) { const v = p.volume; p.volume = .5; volFijo = p.volume !== .5; p.volume = v; }
+      if (!volFijo) { rampa(p, .2, 280); agachada = 1; }
+    } else if (agachada && p) {
+      rampa(p, 1, 800); agachada = 0;
+    }
+  }
   // iPhone solo deja sonar un audio que arrancó dentro de un toque. En la entrada la canción arranca en silencio al
   // tocar «Abrir mensaje» y, tras la cuenta regresiva, basta con quitarle el silencio (eso siempre está permitido).
   function abre() {
@@ -814,45 +930,114 @@ const Musica = (() => {
     } catch (e) {}
   }
   document.addEventListener('visibilitychange', () => {
-    if (document.hidden) { if (ac) ac.suspend(); if (pista) pista.pause(); }
-    else if (sonando) { if (ac) ac.resume(); if (pista) toca(pista); }
+    if (document.hidden) { if (ac) { try { calla(ac.suspend()); } catch (e) {} } if (pista) pista.pause(); }
+    else { if (ac && (sonando || amb || vozSrc)) despierta(); if (sonando && pista) toca(pista); }   // Codex P2: también en la intro o con una voz sonando
   });
-  function rugido(dur) {                       // motor del cohete
-    const t = ac.currentTime, n = Math.floor(ac.sampleRate * dur), buf = ac.createBuffer(1, n, ac.sampleRate), d = buf.getChannelData(0);
-    for (let i = 0; i < n; i++) d[i] = Math.random() * 2 - 1;
-    const src = ac.createBufferSource(), f = ac.createBiquadFilter(), g = ac.createGain();
-    src.buffer = buf; f.type = 'lowpass'; f.frequency.setValueAtTime(180, t); f.frequency.exponentialRampToValueAtTime(2400, t + dur);
-    g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.35, t + .25); g.gain.exponentialRampToValueAtTime(.0001, t + dur);
-    src.connect(f); f.connect(g); g.connect(master); src.start(t); src.stop(t + dur + .05);
+  /* ----- Sonido de la intro: todo se genera aquí mismo, en el navegador (no hay archivos ni música de terceros) ----- */
+  function nota(dest, t, f, dur, vol, tipo = 'sine') {          // nota con ataque corto y cola larga (cajita de música)
+    const o = ac.createOscillator(), g = ac.createGain();
+    o.type = tipo; o.frequency.value = f;
+    g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(vol, t + .012); g.gain.exponentialRampToValueAtTime(.0001, t + dur);
+    o.connect(g); g.connect(dest); o.start(t); o.stop(t + dur + .05);
+  }
+  // Música suave de fondo: un colchón de acorde y un arpegio de cajita de música con eco. Va en mi bemol mayor,
+  // el mismo tono de la canción (audio/musica.mp3), para que al entrar la canción no desentone.
+  function ambiente() {
+    if (amb) return;
+    const t = ac.currentTime, bus = ac.createGain(), lp = ac.createBiquadFilter(), arp = ac.createGain(), eco = ac.createDelay(1), vuelta = ac.createGain(), nodos = [];
+    bus.gain.setValueAtTime(0, t); bus.gain.linearRampToValueAtTime(1, t + .7); bus.connect(master);
+    lp.type = 'lowpass'; lp.frequency.setValueAtTime(700, t); lp.frequency.exponentialRampToValueAtTime(3400, t + 5); lp.connect(bus);
+    eco.delayTime.value = .31; vuelta.gain.value = .34; arp.connect(lp); arp.connect(eco); eco.connect(vuelta); vuelta.connect(eco); vuelta.connect(lp);
+    [51, 58, 67, 74, 77].forEach((m, i) => [-5, 6].forEach(d => {
+      const o = ac.createOscillator(), g = ac.createGain(); o.type = i < 2 ? 'triangle' : 'sine'; o.frequency.value = hz(m); o.detune.value = d;
+      g.gain.value = i < 2 ? .03 : .018; o.connect(g); g.connect(lp); o.start(t); nodos.push(o);
+    }));
+    const esc = [79, 82, 86, 89, 91, 89, 86, 82];              // a compás con la cuenta: una nota cada 0,2 s
+    for (let i = 0; i < 44; i++) { const tt = t + .2 + i * .2; nota(arp, tt, hz(esc[i % 8]), .9, .05); nota(arp, tt, hz(esc[i % 8] + 12), .45, .012, 'triangle'); }
+    amb = { bus, nodos };
+  }
+  function ambienteFuera(seg) {
+    if (!amb) return; const a = amb, t = ac.currentTime; amb = null;
+    if (a.bus.gain.cancelAndHoldAtTime) a.bus.gain.cancelAndHoldAtTime(t); else { a.bus.gain.cancelScheduledValues(t); a.bus.gain.setValueAtTime(a.bus.gain.value, t); }
+    a.bus.gain.linearRampToValueAtTime(0, t + seg);
+    setTimeout(() => { a.nodos.forEach(o => { try { o.stop(); } catch (e) {} }); try { a.bus.disconnect(); } catch (e) {} }, seg * 1000 + 250);
+  }
+  function ruido(seg, grave) {                                   // ruido blanco, o grave (marrón) para el rugido
+    const n = Math.floor(ac.sampleRate * seg), buf = ac.createBuffer(1, n, ac.sampleRate), d = buf.getChannelData(0); let b = 0;
+    for (let i = 0; i < n; i++) { const w = Math.random() * 2 - 1; if (grave) { b = (b + .02 * w) / 1.02; d[i] = b * 3.5; } else d[i] = w; }
+    const s = ac.createBufferSource(); s.buffer = buf; s.loop = true; return s;
+  }
+  // Cohete: ruge `antes` segundos en la plataforma (rugido que crece y crepita) y sale disparado (silbido que sube y se aleja).
+  function motores(antes) {
+    const t = ac.currentTime, sale = t + antes, fin = sale + 1.9, dest = amb ? amb.bus : master;
+    const r = ruido(2, true), lp = ac.createBiquadFilter(), tiem = ac.createGain(), g = ac.createGain(), lfo = ac.createOscillator(), lg = ac.createGain();
+    lp.type = 'lowpass'; lp.Q.value = .8; lp.frequency.setValueAtTime(380, t); lp.frequency.exponentialRampToValueAtTime(1400, sale); lp.frequency.exponentialRampToValueAtTime(3200, sale + .5); lp.frequency.exponentialRampToValueAtTime(500, fin);   // con medios: el parlante del celular no da graves
+    lfo.type = 'sawtooth'; lfo.frequency.setValueAtTime(22, t); lfo.frequency.linearRampToValueAtTime(40, sale); lg.gain.value = .3; lfo.connect(lg); lg.connect(tiem.gain);
+    g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.2, t + .3); g.gain.linearRampToValueAtTime(.34, sale); g.gain.linearRampToValueAtTime(.6, sale + .3); g.gain.exponentialRampToValueAtTime(.0001, fin);
+    r.connect(lp); lp.connect(tiem); tiem.connect(g); g.connect(dest); r.start(t); r.stop(fin + .1); lfo.start(t); lfo.stop(fin + .1);
+    const w = ruido(1.5, false), bp = ac.createBiquadFilter(), gw = ac.createGain();
+    bp.type = 'bandpass'; bp.Q.value = 1.4; bp.frequency.setValueAtTime(500, sale); bp.frequency.exponentialRampToValueAtTime(4200, sale + 1.1);
+    gw.gain.setValueAtTime(.0001, sale); gw.gain.exponentialRampToValueAtTime(.24, sale + .3); gw.gain.exponentialRampToValueAtTime(.0001, sale + 1.5);
+    w.connect(bp); bp.connect(gw); gw.connect(dest); w.start(sale); w.stop(sale + 1.6);
+    const o = ac.createOscillator(), fo = ac.createBiquadFilter(), go = ac.createGain(); o.type = 'sawtooth'; fo.type = 'lowpass'; fo.frequency.value = 700;
+    o.frequency.setValueAtTime(62, t); o.frequency.linearRampToValueAtTime(92, sale); o.frequency.exponentialRampToValueAtTime(420, sale + 1.2);
+    go.gain.setValueAtTime(.0001, t); go.gain.exponentialRampToValueAtTime(.06, t + .4); go.gain.linearRampToValueAtTime(.09, sale + .2); go.gain.exponentialRampToValueAtTime(.0001, sale + 1.4);
+    o.connect(fo); fo.connect(go); go.connect(dest); o.start(t); o.stop(sale + 1.5);
   }
   function crea() {
     if (ac) return true;
     const C = window.AudioContext || window.webkitAudioContext; if (!C) return false;
     desbloquea();
     ac = new C(); master = ac.createGain(); master.gain.value = .8; master.connect(ac.destination);
+    cargaVoces();
     return true;
   }
   return {
     silenciada() { return !!ac && !activo; },
+    // Hace sonar una voz de Gaetano. Devuelve cuántos segundos sonó (0 si no pudo sonar). Con `forzar`, suena
+    // aunque el invitado haya apagado la música (lo pidió él tocando «Escucha a Gaetano»).
+    async habla(n, forzar) {
+      if (!crea() || (!activo && !forzar)) return 0;
+      despierta();
+      const b = await Promise.race([cargaVoz(n), espera(4000).then(() => null)]);   // como máximo 4 s de espera
+      if (!b || (!activo && !forzar)) return 0;   // Codex P2: si apagaron la música mientras cargaba, no suena
+      if (vozSrc) { try { vozSrc.stop(); } catch (e) {} }
+      const s = ac.createBufferSource(), g = ac.createGain(), fondo = amb;
+      const encima = pista && !pista.paused && !pista.muted;   // ¿suena la canción?
+      if (encima && volFijo === undefined) { const v = pista.volume; pista.volume = .5; volFijo = pista.volume !== .5; pista.volume = v; }
+      // Sin compresor: la voz suena tal como se dejó en el archivo. Con la suma de todo, el pico queda por debajo del tope.
+      s.buffer = b; g.gain.value = !activo ? .9 : encima && volFijo ? 1.2 : 1; s.connect(g); g.connect(activo ? master : ac.destination);
+      vozSrc = s; agacha(true); if (fondo) fondo.bus.gain.setTargetAtTime(.33, ac.currentTime, .05);   // la música de la intro también se agacha
+      return new Promise(res => {
+        let hecho = false;
+        const fin = () => { if (hecho) return; hecho = true; if (vozSrc === s) { vozSrc = null; agacha(false); } if (fondo && amb === fondo) fondo.bus.gain.setTargetAtTime(1, ac.currentTime, .2); res(b.duration); };
+        s.onended = fin; s.start();
+        setTimeout(() => { if (!hecho) { try { s.stop(); } catch (e) {} fin(); } }, (b.duration + 1.5) * 1000);   // Codex P2: tope por si el audio quedó suspendido
+      });
+    },
+    tiene(n) { return !!VOCES[n]; },
+    // Música suave de la intro: entra al abrir el mensaje y se va cuando aparece la invitación (ahí arranca la canción).
+    intro(on) { if (!ac || !activo) return; if (on) ambiente(); else ambienteFuera(1.4); },
     // Deja listos los efectos sin arrancar la música. Con `conMusica`, la canción arranca en silencio (ver abre).
-    preparar(conMusica) { if (!crea()) return false; ac.resume(); if (conMusica && activo) abre(); return true; },
+    preparar(conMusica) { if (!crea()) return false; despierta(); if (conMusica && activo) abre(); return true; },
     iniciar() {
       if (!crea()) return false;
-      ac.resume(); if (sonando) return true;
+      despierta(); if (sonando) return true;
       activo = true; master.gain.setTargetAtTime(.8, ac.currentTime, .05);
       sonando = true; suena(); return true;
     },
     alternar() {
       if (!ac) return this.iniciar();
-      if (sonando) { sonando = false; activo = false; if (pista) pista.pause(); master.gain.setTargetAtTime(0, ac.currentTime, .05); try { silencio && silencio.pause(); } catch (e) {} }
-      else { activo = true; desbloquea(); ac.resume(); master.gain.setTargetAtTime(.8, ac.currentTime, .05); sonando = true; suena(); }
+      if (sonando) { sonando = false; activo = false; ambienteFuera(.2); if (pista) pista.pause(); master.gain.setTargetAtTime(0, ac.currentTime, .05); try { silencio && silencio.pause(); } catch (e) {} }
+      else { activo = true; desbloquea(); despierta(); master.gain.setTargetAtTime(.8, ac.currentTime, .05); sonando = true; suena(); }
       return sonando;
     },
-    efecto(tipo) {
+    efecto(tipo, x) {
       if (!ac || !activo) return;
-      if (tipo === 'bip') barrido(880, 860, .12, 'square', .09);
-      if (tipo === 'bipfin') barrido(1320, 1300, .45, 'square', .1);
-      if (tipo === 'despegue') { barrido(70, 520, 1.3, 'sawtooth', .12); rugido(1.4); }
+      if (tipo === 'cuenta') { const t = ac.currentTime, m = [82, 84, 86][x] || 87; nota(master, t, hz(m), .6, .11); nota(master, t, hz(m + 12), .3, .03, 'triangle'); barrido(190, 110, .16, 'sine', .14); }
+      if (tipo === 'motores') motores(x || 1.25);
+      if (tipo === 'bla') { const t = ac.currentTime, m = [70, 72, 75, 77, 79, 82, 84, 87][(x || 0) + Math.floor(Math.random() * 5)]; nota(master, t, hz(m), .085, .05, 'triangle'); nota(master, t, hz(m + 19), .05, .012); }   // «idioma marciano»
+      if (tipo === 'llegada') { const t = ac.currentTime; [87, 91, 94, 99].forEach((n, i) => { nota(master, t + i * .07, hz(n), .9, .07); nota(master, t + i * .07, hz(n + 12), .5, .02, 'triangle'); }); }
       if (tipo === 'mueve') barrido(160, 230, .3, 'sawtooth', .025);
       if (tipo === 'baja') barrido(420, 180, .8, 'sawtooth', .03);
       if (tipo === 'sube') barrido(180, 420, .8, 'sawtooth', .03);
@@ -861,6 +1046,85 @@ const Musica = (() => {
       if (tipo === 'pop') barrido(300, 900, .12, 'sine', .12);
       if (tipo === 'tic') barrido(1400, 1100, .03, 'square', .03);
       if (tipo === 'gana') { const t = ac.currentTime; [72, 76, 79, 84, 88].forEach((n, i) => { voz(t + i * .09, n, .25, 'square', .06); voz(t + i * .09, n + 12, .2, 'triangle', .03); }); }
+    }
+  };
+})();
+
+/* ===== La voz de Gaetano y su subtítulo ===== */
+const Gaetano = (() => {
+  const TXT = { hola: '¡Hola, soy Gaetano! ¡Te invito a mi fiesta!', gracias: '¡Gracias por confirmar! ¡Te espero!', rescate: '¡Lo rescataste! ¡Bien hecho!' };
+  const SIN_SONIDO = { hola: 3800, gracias: 3200, rescate: 2400 };   // cuánto queda el subtítulo si no hay sonido
+  const caja = $('voz-g'), txt = $('voz-g-t'), anuncio = $('voz-anuncio'), dicho = {}; let hilo = 0, reloj;
+  // Muestra lo que dice y lo hace sonar. Se resuelve cuando termina de hablar; el subtítulo se va un segundo después.
+  async function dice(n, forzar, btn) {
+    dicho[n] = true; const id = ++hilo; clearTimeout(reloj);
+    txt.textContent = TXT[n]; caja.classList.remove('sale'); caja.hidden = false; caja.classList.add('hablando');
+    anuncio.textContent = ''; setTimeout(() => { if (id === hilo) anuncio.textContent = 'Gaetano dice: ' + TXT[n]; }, 60);
+    if (btn) btn.classList.add('hablando');
+    const t0 = Date.now(), dur = await Musica.habla(n, forzar);
+    if (!dur) await espera(Math.max(0, SIN_SONIDO[n] - (Date.now() - t0)));
+    if (btn) btn.classList.remove('hablando');
+    if (id === hilo) {
+      caja.classList.remove('hablando');
+      reloj = setTimeout(() => { if (id !== hilo) return; caja.classList.add('sale'); reloj = setTimeout(() => { if (id === hilo) caja.hidden = true; }, 300); }, 1100);
+    }
+    return dur;
+  }
+  return { dijo: n => !!dicho[n], dice };
+})();
+$('voz-m2').addEventListener('click', e => {
+  const b = e.currentTarget;   // que el subtítulo de abajo no tape el botón
+  if (b.getBoundingClientRect().bottom > innerHeight - 130) b.scrollIntoView({ block: 'center', behavior: reducir ? 'auto' : 'smooth' });
+  Musica.preparar(); Gaetano.dice('hola', true, b);
+});
+
+/* ===== Paso a paso: no se puede bajar a una misión sin completar la anterior. El avance se recuerda en este teléfono ===== */
+const Pasos = (() => {
+  const SEC = ['m1', 'm2', 'm3', 'm4'], tope = $('tope'), pie = document.querySelector('.pie');
+  const TOPE = [null, ['Misión 2 bloqueada', 'Rescata a un marcianito para abrirla.'], ['Misión 3 bloqueada', 'Lee tu invitación y toca «¡Leída!».'], ['Misión 4 bloqueada', 'Revisa el plan y toca «¡Anotado!».']];
+  const QUE = ['aceptar', 'soltar', 'sigue-m2', 'sigue-m3'];                       // lo que hay que tocar para avanzar
+  const AVISO = ['Primero toca «Aceptar la misión».', 'Primero rescata a un marcianito: toca «¡Soltar!».', 'Primero toca «¡Leída! Siguiente misión».', 'Primero toca «¡Anotado! Última misión».'];
+  let paso = 0, libre = false;
+  function pinta(nueva) {
+    SEC.forEach((id, i) => {
+      const s = $(id); s.classList.toggle('cerrada', i >= paso);
+      if (nueva === i + 1 && !reducir) { s.classList.remove('recien'); void s.offsetWidth; s.classList.add('recien'); }
+    });
+    pie.classList.toggle('cerrada', paso < 4);
+    document.querySelectorAll('.ruta button').forEach((b, i) => { const bl = i >= paso; b.classList.toggle('bloq', bl); b.setAttribute('aria-label', (i + 1) + '. ' + b.textContent.trim().replace(/^\d+/, '') + (bl ? ' (bloqueada)' : '')); });
+    const t = TOPE[paso]; tope.hidden = !t; if (t) { $('tope-t').textContent = t[0]; $('tope-p').textContent = t[1]; }
+    $('sigue-m2').classList.toggle('hecha', paso > 2); $('sigue-m3').classList.toggle('hecha', paso > 3);
+  }
+  function abre(n, mover) {
+    if (n > paso) { paso = Math.min(4, n); try { localStorage.setItem('mg6_paso', String(paso)); } catch (e) {} pinta(n); dice('Se abrió la misión ' + paso + '.'); }
+    if (mover) { const id = SEC[Math.min(4, n) - 1]; ir(id); try { $('t-' + id).focus({ preventScroll: true }); } catch (e) {} }   // Codex P3: el foco va al título de la misión
+  }
+  // Codex P2: si la página falla se abre todo DE VERDAD (candados, avisos y navegación quedan coherentes). No se guarda en el teléfono.
+  function todo() { libre = true; document.documentElement.classList.remove('pasos'); if (paso < 4) { paso = 4; pinta(0); } }
+  function dice(t) { const a = $('voz-anuncio'); a.textContent = ''; setTimeout(() => { a.textContent = t; }, 60); }
+  // Si pasan 20 s con la máquina encendida y sin rescatar a nadie, se les muestra el botón (para que nadie se quede atascado).
+  function ayuda() {
+    if (paso !== 1) return; const b = $('soltar');
+    $('guia').textContent = 'Toca «¡Soltar!» y la garra rescata a un marcianito.';
+    b.classList.remove('ojo'); void b.offsetWidth; b.classList.add('ojo'); setTimeout(() => b.classList.remove('ojo'), 1800);
+  }
+  // Intentan pasar sin completar la misión: se les muestra qué falta.
+  function pista() {
+    const el = $(QUE[paso]); if (!el) return;
+    el.scrollIntoView({ behavior: reducir ? 'auto' : 'smooth', block: 'center' });
+    el.classList.remove('ojo'); void el.offsetWidth; el.classList.add('ojo'); setTimeout(() => el.classList.remove('ojo'), 1800);
+    try { el.focus({ preventScroll: true }); } catch (e) {}                              // Codex P3: el foco va al botón que falta
+    tope.classList.remove('late'); void tope.offsetWidth; tope.classList.add('late');
+    dice(AVISO[paso] || ''); Musica.efecto('tic');
+  }
+  tope.addEventListener('click', pista);
+  ['error', 'unhandledrejection'].forEach(t => addEventListener(t, todo));
+  return {
+    abre, pista, ayuda, todo, puede: id => libre || SEC.indexOf(id) < paso, actual: () => paso,
+    inicia() {
+      let p = 0; try { p = parseInt(localStorage.getItem('mg6_paso'), 10) || 0; if (localStorage.getItem('mg6_rsvp')) p = 4; } catch (e) {}
+      if (libre || !document.documentElement.classList.contains('pasos')) { libre = true; p = 4; }   // ya hubo un error antes de llegar aquí
+      paso = Math.max(0, Math.min(4, p)); pinta(0);
     }
   };
 })();
@@ -970,6 +1234,7 @@ async function encender() {
   }
   encendida = true; encendiendo = false; S.t0 = performance.now(); S.modo = 'demo';
   $('guia').textContent = 'Mueve la garra y suéltala sobre un marcianito.';
+  setTimeout(() => { if (!ocupado && !rescatado) Pasos.ayuda(); }, 20000);
 }
 function listo() { if (!encendida) { encender(); return false; } return !ocupado; }
 function tomaControl() { if (S.modo === 'demo') S.modo = 'manual'; }
@@ -1046,8 +1311,9 @@ async function soltar() {
   chispas($('maquina'), SALIDA_X * esc, 380 * esc, 26);
   $('estado').textContent = '¡Rescataste a ' + obj.n + '!';
   $('ver-inv').hidden = false; $('soltar').textContent = 'Otra vez';
-  marca('m1');
-  setTimeout(() => premio(obj), reducir ? 200 : 1300);
+  marca('m1'); Pasos.abre(2);                                                    // se abre la misión 2
+  const felicita = Gaetano.dijo('rescate') ? null : espera(reducir ? 0 : 380).then(() => Gaetano.dice('rescate'));   // solo la primera vez, después del «tin-tin»
+  setTimeout(async () => { if (felicita) await felicita; premio(obj); }, reducir ? 200 : 1300);
   if (!reducir) {
     await tween(260, p => S.a = lerp(1, .25, p));
     const x2 = S.x; await tween(800, p => S.x = lerp(x2, RIEL.centro, p));
@@ -1056,25 +1322,109 @@ async function soltar() {
 }
 $('soltar').addEventListener('click', soltar);
 
-/* El marcianito entrega el sobre */
-function premio(obj) {
-  $('ali-premio').innerHTML = marcianito(obj.c, obj.c2, 0);
-  $('premio-txt').textContent = obj.n + ' te trae un mensaje del Comando Estelar' + (NOMBRE ? ', ' + NOMBRE : '') + '.';
-  $('sobre').classList.remove('abierto');
-  abre($('d-premio'));
-  setTimeout(() => { $('sobre').classList.add('abierto'); Musica.efecto('pop'); }, reducir ? 0 : 600);
-}
+/* El marcianito rescatado da las gracias y entrega el sobre. «Habla» en marciano: el texto sale letra por letra con
+   pitidos (cada marcianito tiene su tono). Con la pregunta aparece el sobre y el invitado lo abre con su toque.
+   Un toque antes de tiempo salta al final; si cierran la ventana, la Misión 2 igual ya quedó abierta. */
+const Premio = (() => {
+  const dlg = $('d-premio'), ali = $('ali-premio'), txt = $('premio-txt'), sobre = $('sobre'), btn = $('abrir-inv'), cielo = $('premio-cielo'), carta = sobre.querySelector('.sobre-carta');
+  let turno = 0, listo = false, abriendo = false, F = [], vuelo = null, velo = null;
+  const fuera = id => id !== turno || !dlg.open || listo;
+  async function escribe(id, frase, tono) {            // devuelve false si se canceló o se saltó al final
+    txt.textContent = ''; ali.classList.add('hablando'); $('voz-anuncio').textContent = frase;
+    for (let i = 0; i < frase.length; i++) {
+      if (fuera(id)) return false;
+      txt.textContent = frase.slice(0, i + 1);
+      if (i % 3 === 0 && /[a-záéíóúñ]/i.test(frase[i])) Musica.efecto('bla', tono);
+      await espera(32);
+    }
+    ali.classList.remove('hablando'); return !fuera(id);
+  }
+  function final() {                                   // la pregunta, el sobre a la vista y el botón
+    listo = true; ali.classList.remove('hablando'); txt.textContent = reducir ? F.join(' ') : F[2]; $('voz-anuncio').textContent = F.join(' ');
+    sobre.classList.remove('oculto'); sobre.classList.add('listo'); btn.hidden = false; try { btn.focus({ preventScroll: true }); } catch (e) {}
+  }
+  async function muestra(obj) {
+    const id = ++turno, tono = Math.max(0, ALIENS.indexOf(obj)) % 4; listo = false; abriendo = false;
+    F = ['¡Me salvaste' + (NOMBRE ? ', ' + NOMBRE : '') + '! ¡Muchísimas gracias!', 'Como premio te ganaste una invitación especial.', '¿Quieres descubrirla?'];
+    ali.innerHTML = marcianito(obj.c, obj.c2, 0); ali.classList.remove('hablando', 'feliz');
+    limpia(); sobre.classList.remove('abierto', 'listo'); sobre.classList.add('oculto'); btn.hidden = true; txt.textContent = '';
+    abre(dlg);
+    if (reducir) { final(); return; }
+    await espera(480);
+    if (!(await escribe(id, F[0], tono))) return; await espera(750); if (fuera(id)) return;
+    if (!(await escribe(id, F[1], tono))) return; sobre.classList.remove('oculto'); Musica.efecto('pop'); await espera(800); if (fuera(id)) return;
+    if (!(await escribe(id, F[2], tono))) return; final();
+  }
+  function limpia() {                                  // deja todo como antes del vuelo
+    if (vuelo) vuelo.remove(); if (velo) velo.remove(); vuelo = velo = null;
+    $('inv').classList.remove('en-vuelo'); dlg.classList.remove('vuelo'); carta.style.visibility = '';
+  }
+  // Anima un elemento de un estado a otro y deja puesto el estado final (sin depender del relleno de la animación).
+  async function anima(el, a, b, ms, curva) { const an = el.animate([a, b], { duration: ms, easing: curva }); try { await an.finished; } catch (e) {} Object.assign(el.style, b); }
+  // Del sobre sale LA invitación (la misma imagen de la Misión 2): crece hasta verse entera, se queda un momento
+  // (un toque sigue) y vuela a su lugar en la Misión 2. Devuelve false si no pudo terminar (y se sigue por el camino simple).
+  async function vuela() {
+    const inv = $('inv'), im = inv.querySelector('img'), r0 = carta.getBoundingClientRect(), rs = sobre.getBoundingClientRect();
+    const W = Math.min(innerWidth * .86, 400, (innerHeight - 120) * 1159 / 1635), H = W * 1635 / 1159, x1 = (innerWidth - W) / 2, y1 = (innerHeight - H) / 2;
+    // La imagen se dibuja una sola vez a su tamaño grande y se mueve con transform (escala alrededor de su centro).
+    const T = (cx, cy, s, g) => 'translate(' + (cx - x1 - W / 2).toFixed(1) + 'px,' + (cy - y1 - H / 2).toFixed(1) + 'px) scale(' + s.toFixed(4) + ') rotate(' + g + 'deg)';
+    const s0 = r0.width / W, asoma = Math.max(30, rs.top - r0.top + 8) / (H * s0);          // al inicio solo se ve lo que asoma del sobre
+    const a = { transform: T(r0.left + W * s0 / 2, r0.top + H * s0 / 2, s0, 0), clipPath: 'inset(0px 0px ' + ((1 - asoma) * 100).toFixed(1) + '% 0px round 16px)' };
+    const b = { transform: T(innerWidth / 2, innerHeight / 2, 1, -2), clipPath: 'inset(-70px -70px -90px -70px round 16px)' };
+    vuelo = document.createElement('img'); vuelo.className = 'inv-vuelo'; vuelo.alt = ''; vuelo.src = im.currentSrc || im.src;
+    Object.assign(vuelo.style, { left: x1.toFixed(1) + 'px', top: y1.toFixed(1) + 'px', width: W.toFixed(1) + 'px', height: H.toFixed(1) + 'px' }, a);
+    dlg.appendChild(vuelo); carta.style.visibility = 'hidden'; dlg.classList.add('vuelo'); Musica.efecto('llegada');
+    await anima(vuelo, a, b, 900, 'cubic-bezier(.3,0,.2,1.08)');
+    if (!dlg.open || !vuelo) return false;
+    chispas(cielo, innerWidth / 2, innerHeight / 2 - H * .3, 26);
+    await Promise.race([espera(1500), new Promise(r => vuelo.addEventListener('click', r, { once: true })), new Promise(r => dlg.addEventListener('close', r, { once: true }))]);   // la miran; un toque sigue
+    if (!dlg.open || !vuelo) return false;
+    // A su lugar: se cierra la ventana, la página salta (tapada por un velo igual de oscuro) a la Misión 2 y la invitación aterriza.
+    velo = document.createElement('div'); velo.className = 'velo-vuelo'; document.body.append(velo, vuelo); dlg.close();
+    Pasos.abre(2); inv.classList.add('en-vuelo'); $('m2').scrollIntoView({ behavior: 'auto', block: 'start' });
+    const rt = inv.getBoundingClientRect(), cx = rt.left + rt.width / 2, cy = rt.top + rt.height / 2;
+    const c = { transform: T(cx, cy, inv.offsetWidth / W, -1.6), clipPath: b.clipPath };
+    velo.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 650, easing: 'ease-in', fill: 'forwards' });
+    await anima(vuelo, b, c, 650, 'cubic-bezier(.3,.7,.2,1)');
+    limpia(); marca('m2'); Musica.efecto('pop'); chispas($('lluvia'), cx, cy, 22); try { $('t-m2').focus({ preventScroll: true }); } catch (e) {}
+    return true;
+  }
+  async function abreSobre() {
+    if (abriendo || !dlg.open) return;
+    if (!listo) { final(); return; }                   // toque antes de tiempo: salta al final
+    abriendo = true; btn.hidden = true; sobre.classList.remove('listo'); sobre.classList.add('abierto'); ali.classList.add('feliz');
+    txt.textContent = '¡Es para ti!'; $('voz-anuncio').textContent = '¡Es para ti! Del sobre sale tu invitación.'; Musica.efecto('pop');
+    const rs = sobre.getBoundingClientRect(); chispas(cielo, rs.left + rs.width / 2, rs.top + 10, 22);
+    let ok = false;
+    try {
+      if (!reducir && typeof carta.animate === 'function') { await espera(1050); if (dlg.open) ok = await vuela(); }
+      else await espera(700);
+    } catch (e) {}
+    if (!ok) { limpia(); if (dlg.open) dlg.close(); verInvitacion(); }   // camino simple: ir a la Misión 2
+  }
+  btn.addEventListener('click', abreSobre); sobre.addEventListener('click', abreSobre);
+  $('charla').addEventListener('click', () => { if (dlg.open && !listo) final(); });
+  dlg.addEventListener('close', () => { turno++; ali.classList.remove('hablando'); });
+  dlg.addEventListener('cancel', e => { if (abriendo) e.preventDefault(); });   // con el sobre ya abierto, Escape no corta el vuelo
+  return { muestra };
+})();
+function premio(obj) { Premio.muestra(obj); }
 function verInvitacion() {
-  const inv = $('inv'); ir('m2');
+  const inv = $('inv'); Pasos.abre(2, true);
   setTimeout(() => { inv.classList.remove('llega'); void inv.offsetWidth; inv.classList.add('llega'); chispas($('lluvia'), innerWidth / 2, innerHeight * .45, 26); marca('m2'); }, reducir ? 0 : 450);
 }
-$('abrir-inv').addEventListener('click', () => { $('d-premio').close(); verInvitacion(); });
 $('ver-inv').addEventListener('click', verInvitacion);
 
 /* Portada y ruta */
 function marca(id) { const b = document.querySelector('.ruta button[data-ir="' + id + '"]'); if (b) b.classList.add('hecho'); }
-document.querySelectorAll('.ruta button').forEach(b => b.addEventListener('click', () => ir(b.dataset.ir)));
-$('aceptar').addEventListener('click', () => { $('musica').hidden = !Musica.iniciar(); $('nota-musica').hidden = true; ir('m1'); setTimeout(encender, reducir ? 0 : 500); });
+document.querySelectorAll('.ruta button').forEach(b => b.addEventListener('click', () => { if (Pasos.puede(b.dataset.ir)) ir(b.dataset.ir); else Pasos.pista(); }));
+$('sigue-m2').addEventListener('click', () => { marca('m2'); Musica.efecto('pop'); Pasos.abre(3, true); });
+$('sigue-m3').addEventListener('click', () => { marca('m3'); Musica.efecto('pop'); Pasos.abre(4, true); });
+$('aceptar').addEventListener('click', async () => {
+  $('musica').hidden = !Musica.iniciar(); $('nota-musica').hidden = true; Pasos.abre(1, true);
+  if (!Gaetano.dijo('hola')) { await espera(reducir ? 0 : 500); await Gaetano.dice('hola'); setTimeout(encender, reducir ? 0 : 200); }
+  else setTimeout(encender, reducir ? 0 : 500);
+});
 $('musica').addEventListener('click', () => { $('musica').setAttribute('aria-pressed', String(!!Musica.alternar())); });
 $('llegar').addEventListener('click', () => marca('m3'));
 
@@ -1199,18 +1549,30 @@ const Pase = (() => {
   requestAnimationFrame(pinta);
   function cerrar() { intro.classList.add('fuera'); document.body.classList.remove('con-intro'); setTimeout(() => { vivo = false; intro.hidden = true; }, 650); }
   $('intro-saltar').addEventListener('click', cerrar);
+  let abierta = false;
   $('intro-abrir').addEventListener('click', async () => {
+    if (abierta) return; abierta = true;
     const hayAudio = Musica.preparar(true);
-    intro.classList.add('contando');
-    const c = $('cuenta-i');
-    for (const n of ['3', '2', '1']) { c.textContent = n; c.classList.remove('pum'); void c.offsetWidth; c.classList.add('pum'); Musica.efecto('bip'); vel *= 2.3; await espera(720); }
-    c.classList.remove('pum'); c.textContent = '¡Despegue!'; c.classList.add('fin'); Musica.efecto('bipfin'); Musica.efecto('despegue'); vel = 16;
-    intro.classList.add('despegando');
+    intro.classList.add('contando'); Musica.intro(true);                 // entra la música suave de fondo
+    const c = $('cuenta-i'), frase = t => { c.textContent = t; c.classList.remove('pum', 'pop'); void c.offsetWidth; c.classList.add('fin', 'frase', 'pop'); };
+    let i = 0;
+    for (const n of ['3', '2', '1']) { c.textContent = n; c.classList.remove('pum'); void c.offsetWidth; c.classList.add('pum'); Musica.efecto('cuenta', i++); vel *= 2.3; await espera(800); }
+    // «¡Al infinito… y más allá!»: con la primera parte el cohete enciende motores; con la segunda, despega.
+    const conVoz = hayAudio && Musica.tiene('infinito'), antes = conVoz ? Math.max(.6, Number(FIESTA.vozDespegueCorte) || 1.3) : 1.25;
+    const voz = conVoz ? Musica.habla('infinito') : null;
+    $('voz-anuncio').textContent = '¡Al infinito… y más allá!';
+    frase('¡Al infinito…'); intro.classList.add('motores'); Musica.efecto('motores', antes); vel = 6;
+    await espera(antes * 1000);
+    frase('…y más allá!'); intro.classList.add('despegando'); vel = 16;
     await espera(1050);
+    if (voz) await Promise.race([voz, espera(2500)]);                    // deja que Gaetano termine la frase
     intro.classList.add('blanco'); await espera(280);
     scrollTo(0, 0); document.body.classList.add('revelada');
+    Musica.intro(false); Musica.efecto('llegada');                       // la música suave se va y entra la canción
     if (hayAudio) { $('musica').hidden = !Musica.iniciar(); $('nota-musica').hidden = true; }
     cerrar();
+    await espera(reducir ? 0 : 900);
+    Gaetano.dice('hola');
   });
 })();
 
@@ -1240,6 +1602,7 @@ function fiesta(tipo, quien) {
   $('fiesta-s').textContent = va ? $('fecha-txt').textContent + ' · 11:00 a. m.' : '';
   f.classList.toggle('calma', !va); f.hidden = false; document.body.classList.add('con-intro');
   if (va && !reducir) confeti();
+  if (va) setTimeout(() => { if (!f.hidden) Gaetano.dice('gracias'); }, reducir ? 200 : 700);
 }
 $('fiesta-ok').addEventListener('click', () => {
   $('fiesta').hidden = true; document.body.classList.remove('con-intro');
@@ -1248,7 +1611,7 @@ $('fiesta-ok').addEventListener('click', () => {
 });
 
 aplicaNombre(); addEventListener('hashchange', aplicaNombre);
-Pase.inicia();
+Pase.inicia(); Pasos.inicia();
 </script>
 </body>
 </html>

@@ -11,8 +11,8 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='5' fill='%230B1238'/%3E%3Cpath fill='%23FFD84D' d='M12 3.5l2.4 5.3 5.8.6-4.4 3.8 1.3 5.7L12 16l-5.1 2.9 1.3-5.7L3.8 9.4l5.8-.6z'/%3E%3C/svg%3E">
 <link rel="preload" href="f/nunito.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="f/bungee.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="panel.css?v=1">
-<script src="panel.js?v=2" defer></script>
+<link rel="stylesheet" href="panel.css?v=2">
+<script src="panel.js?v=3" defer></script>
 </head>
 <body>
 <a class="salta" href="#lista">Saltar a la lista</a>
@@ -71,6 +71,7 @@
 
     <div class="acciones">
       <button class="btn btn-lima" type="button" id="b-agregar">Agregar invitados</button>
+      <button class="btn btn-linea" type="button" id="b-anotar">Anotar una confirmación</button>
       <button class="btn btn-linea" type="button" id="b-copiar">Copiar resumen</button>
     </div>
     <p class="pie"><span id="act" role="status"></span><button class="enlace" type="button" id="b-act">Actualizar</button><button class="enlace" type="button" id="b-salir">Salir en este teléfono</button></p>
@@ -124,6 +125,35 @@
     <p class="error" id="e-ficha" role="alert" hidden></p>
     <button class="enlace cierra" type="button" data-cerrar>Cerrar</button>
   </div>
+</dialog>
+
+<!-- Confirmación: Marina la anota o la corrige ella misma, sin molestar a la familia -->
+<dialog id="d-conf" aria-labelledby="t-conf">
+  <form class="hoja" id="f-conf" novalidate>
+    <h2 id="t-conf" tabindex="-1">Anotar una confirmación</h2>
+    <p id="conf-txt">Para quien te avisó por teléfono o en persona. No se le envía nada.</p>
+    <label class="rot" for="c-nombre">Nombre</label>
+    <input class="campo" id="c-nombre" type="text" autocomplete="off" autocapitalize="words" maxlength="40">
+    <fieldset class="elige"><legend class="rot">¿Va a la fiesta?</legend>
+      <label><input type="radio" name="c-asiste" value="si"><span>Va</span></label>
+      <label><input type="radio" name="c-asiste" value="no"><span>No va</span></label>
+    </fieldset>
+    <fieldset class="elige"><legend class="rot">¿Quién es?</legend>
+      <label><input type="radio" name="c-tipo" value="nino"><span>Niño o niña</span></label>
+      <label><input type="radio" name="c-tipo" value="adulto"><span>Adulto</span></label>
+    </fieldset>
+    <label class="rot" for="c-hermanos">Niños que van con él o ella <small>hermanitos</small></label>
+    <input class="campo" id="c-hermanos" type="number" inputmode="numeric" min="0" max="9" step="1">
+    <label class="rot" for="c-edades">Edades de esos niños <small>opcional</small></label>
+    <input class="campo" id="c-edades" type="text" autocomplete="off" maxlength="40">
+    <label class="rot" for="c-adulto">Acompaña <small>opcional</small></label>
+    <input class="campo" id="c-adulto" type="text" autocomplete="off" autocapitalize="words" maxlength="60">
+    <p class="error" id="e-conf" role="alert" hidden></p>
+    <div class="par">
+      <button class="btn btn-linea" type="button" data-cerrar>Cancelar</button>
+      <button class="btn btn-lima" type="submit" id="ok-conf">Guardar</button>
+    </div>
+  </form>
 </dialog>
 
 <div class="aviso" id="aviso" role="status" aria-live="polite"></div>

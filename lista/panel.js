@@ -48,11 +48,10 @@
       a.remove(); avisa(bien ? ok : 'No se pudo copiar');
     }
   }
-  // Enlace de la invitación con el nombre puesto (mismo formato que lee la invitación: …#Maria-Jose).
-  function enlaceDe(nombre) {
-    const s = String(nombre).replace(/[^A-Za-zÁÉÍÓÚÜÑáéíóúüñ ]/g, ' ').trim().split(/\s+/).filter(Boolean).join('-').slice(0, 24);
-    return INVITACION + (s.length >= 2 ? '#' + encodeURIComponent(s) : '');
-  }
+  // Enlace de la invitación. Desde la versión 8 la invitación saluda a todos igual (ya no lee el nombre del enlace): va sin nombre.
+  function enlaceDe() { return INVITACION; }
+  // Quien confirmó es adulto (Marina lo marca en la ficha): no cuenta entre los niños. Sus hermanitos, si anotó, sí.
+  const esAdulto = c => !!(c && c.tipo === 'adulto');   // quien confirmó es un adulto
 
   /* ---------- Servidor ---------- */
   // Sesión: al salir o cambiar de llave, lo que estaba en camino se corta y, si igual llega, se descarta (nada vuelve a guardarse).
@@ -126,15 +125,17 @@
     sueltas.forEach(c => { const cl = c.asiste ? 'si' : 'no'; E[cl].push({ clase: cl, inv: null, conf: c }); });
     Object.keys(E).forEach(k => E[k].sort((a, b) => nom(a).localeCompare(nom(b), 'es', { sensitivity: 'base' })));
     const hermanitos = E.si.reduce((s, e) => s + (e.conf ? Number(e.conf.hermanos) || 0 : 0), 0);
-    return { E, sueltas, hayLista: activos.length > 0, hermanitos, ninos: E.si.length + hermanitos, total: E.si.length + E.no.length + E.pend.length,
+    const adultos = E.si.filter(e => esAdulto(e.conf)).length, invNinos = E.si.length - adultos;
+    return { E, sueltas, hayLista: activos.length > 0, hermanitos, adultos, invNinos, ninos: invNinos + hermanitos, total: E.si.length + E.no.length + E.pend.length,
       maxId: conf.reduce((m, r) => Math.max(m, Number(r && r.id) || 0), 0) };
   }
   function frase(e) {
     if (e.clase === 'pend') return 'Todavía no responde.';
     if (e.clase === 'no') return e.conf ? 'No podrá ir.' : 'No podrá ir. Lo anotaste tú.';
     if (!e.conf) return 'Va. Lo anotaste tú.';
-    const h = Number(e.conf.hermanos) || 0;
-    return h ? 'Va con ' + plural(h, 'hermanito', 'hermanitos') + (e.conf.edades ? ' (' + e.conf.edades + ')' : '') + '.' : 'Va sin hermanitos.';
+    const h = Number(e.conf.hermanos) || 0, ed = e.conf.edades ? ' (' + e.conf.edades + ')' : '';
+    if (esAdulto(e.conf)) return h ? 'Adulto. Va con ' + plural(h, 'niño', 'niños') + ed + '.' : 'Adulto. Va sin niños.';
+    return h ? 'Va con ' + plural(h, 'hermanito', 'hermanitos') + ed + '.' : 'Va sin hermanitos.';
   }
 
   /* ---------- Pintar ---------- */
@@ -164,7 +165,8 @@
     cabecera();
     cuenta($('n-ninos'), R.ninos);
     $('t-ninos').textContent = R.ninos === 1 ? 'niño va' : 'niños van';
-    $('desglose').textContent = van ? plural(van, 'invitado', 'invitados') + (R.hermanitos ? ' y ' + plural(R.hermanitos, 'hermanito', 'hermanitos') : '') : 'Todavía nadie confirma';
+    $('desglose').textContent = van ? [R.invNinos ? plural(R.invNinos, 'invitado', 'invitados') : '', R.hermanitos ? plural(R.hermanitos, 'hermanito', 'hermanitos') : '']
+      .filter(Boolean).join(' y ') + (R.adultos ? (R.invNinos || R.hermanitos ? ' · ' : '') + plural(R.adultos, 'adulto', 'adultos') : '') : 'Todavía nadie confirma';
     $('avance').textContent = R.hayLista ? 'Respondieron ' + (van + E.no.length) + ' de ' + R.total : 'Agrega tu lista para ver quién falta';
     anillo(van, E.no.length, R.hayLista ? R.total : 0);
     $('c-si').textContent = van; $('c-no').textContent = E.no.length; $('c-pend').textContent = R.hayLista ? E.pend.length : '–';
@@ -177,8 +179,10 @@
     const li = el('li'), b = el('button', 'fila ' + e.clase), d = el('span', 'dato'), lado = el('span', 'lado');
     b.type = 'button';
     d.appendChild(el('span', 'nombre', nom(e)));
+    if (esAdulto(e.conf)) d.appendChild(el('span', 'tipo-adulto', 'Adulto'));
     if (e.clase !== 'pend') d.appendChild(el('span', 'frase', frase(e)));      // en «Sin responder» la frase sobra: lo dice el montón
     if (e.conf && e.conf.adulto) d.appendChild(el('span', 'extra', 'Acompaña: ' + e.conf.adulto));
+    if (e.conf && e.conf.panel) d.appendChild(el('span', 'extra', 'Lo anotaste tú'));
     if (e.inv && e.conf && clave(e.inv.nombre) !== clave(e.conf.nombre)) d.appendChild(el('span', 'extra', 'Confirmó como «' + e.conf.nombre + '»'));
     if (!e.inv && R.hayLista) d.appendChild(el('span', 'fuera', 'No está en tu lista'));
     if (e.clase === 'pend' && e.inv.nota === 'inv') d.appendChild(el('span', 'extra', 'Invitación enviada'));
@@ -244,14 +248,21 @@
         const inv = () => pon(ya ? 'Enviarle la invitación otra vez' : 'Enviarle su invitación por WhatsApp', ya ? null : sub, () => { invita(i); cierraTodo(); }, ya ? '' : 'fuerte');
         const rec = () => pon('Recordarle por WhatsApp', ya ? sub : null, () => { recuerda(i); cierraTodo(); }, ya ? 'fuerte' : '');
         if (ya) { rec(); inv(); } else { inv(); rec(); }
-        pon('Copiar su invitación', 'El enlace con su nombre ya puesto.', () => copia(enlaceDe(i.nombre), 'Enlace copiado'));
+        pon('Copiar su invitación', 'El enlace de la invitación.', () => copia(enlaceDe(i.nombre), 'Enlace copiado'));
+        pon('Anotar su confirmación', 'Si te avisó por teléfono: va o no va, niño o adulto y cuántos niños.', () => abreConf(null, i.nombre));
         pon('Ya me dijo que va', null, () => edita(i, { manual: 'si' }));
         pon('Ya me dijo que no va', null, () => edita(i, { manual: 'no' }));
       } else pon('Borrar mi anotación', 'Vuelve a «Sin responder».', () => edita(i, { manual: '' }));
       if (R.sueltas.length) pon('Confirmó con otro nombre', 'Elige cuál de las confirmaciones es la suya.', () => eligeConf(i));
       if (i.vinculo === '~') pon('Buscar su confirmación otra vez', 'Se vuelve a unir sola si alguien confirma con su nombre.', () => edita(i, { vinculo: '' }));
     }
+    if (c) {                                  // Marina corrige la confirmación ella misma (versión 3); niño o adulto en un toque
+      pon('Corregir la confirmación', 'Va o no va, niño o adulto, cuántos niños y quién acompaña.', () => abreConf(c));
+      if (esAdulto(c)) pon('Es un niño o niña', 'Vuelve a contar entre los niños.', () => escribe('tipo', { id: c.id, tipo: 'nino' }, 'Guardado: niño o niña', 'e-ficha'));
+      else pon('Es un adulto', 'No cuenta entre los niños. Los niños que lleve, sí.', () => escribe('tipo', { id: c.id, tipo: 'adulto' }, 'Guardado: adulto', 'e-ficha'), 'fuerte');
+    }
     if (i && c) pon('Esa confirmación no es suya', 'Se separa y vuelve a «Sin responder».', () => edita(i, { vinculo: '~' }));
+    if (c) pon('Quitar esta confirmación', 'Por si está repetida o fue un error. No se borra: queda guardada aparte.', () => escribe('conf_quitar', { id: c.id }, 'Confirmación quitada', 'e-ficha'), 'quita');
     if (!i && c) {
       if (R.E.pend.length) pon('Es alguien de mi lista', 'Elige a quién corresponde.', () => eligeInv(c), 'fuerte');
       pon('Agregar a mi lista', 'Queda como invitado con este nombre.', () => escribe('agregar', { nombres: [c.nombre] }, 'Agregado a tu lista', 'e-ficha'));
@@ -307,6 +318,35 @@
     } finally { ocupado = false; bots.forEach(b => { b.disabled = false; }); }
   }
 
+  /* ---------- Anotar o corregir una confirmación (Marina, sin molestar a la familia) ---------- */
+  let confAbierta = null;
+  function abreConf(c, nombre) {
+    cierraTodo(); confAbierta = c;
+    $('t-conf').textContent = c ? 'Corregir la confirmación' : 'Anotar una confirmación';
+    $('conf-txt').textContent = c ? 'Lo que cambies aquí reemplaza lo que respondió. No se le envía nada.' : 'Para quien te avisó por teléfono o en persona. No se le envía nada.';
+    $('c-nombre').value = c ? c.nombre : (nombre || '');
+    document.querySelector('input[name="c-asiste"][value="' + (c && c.asiste === false ? 'no' : 'si') + '"]').checked = true;
+    document.querySelector('input[name="c-tipo"][value="' + (esAdulto(c) ? 'adulto' : 'nino') + '"]').checked = true;
+    $('c-hermanos').value = String(c ? Number(c.hermanos) || 0 : 0);
+    $('c-edades').value = c ? c.edades || '' : ''; $('c-adulto').value = c ? c.adulto || '' : '';
+    $('e-conf').hidden = true; abre($('d-conf')); (c ? $('t-conf') : $('c-nombre')).focus();
+  }
+  $('b-anotar').addEventListener('click', () => abreConf(null));
+  $('f-conf').addEventListener('submit', async ev => {
+    ev.preventDefault();
+    const err = $('e-conf'), nombre = limpia($('c-nombre').value, 40), h = Number($('c-hermanos').value || 0);
+    const falla = (t, campo) => { err.textContent = t; err.hidden = false; $(campo).focus(); };
+    if (nombre.length < 2 || nombre.toLowerCase() === nombre.toUpperCase()) return falla('Escribe el nombre.', 'c-nombre');
+    if (!Number.isInteger(h) || h < 0 || h > 9) return falla('Los niños que van con él o ella: un número del 0 al 9.', 'c-hermanos');
+    const d = { nombre, asiste: document.querySelector('input[name="c-asiste"]:checked').value === 'si', tipo: document.querySelector('input[name="c-tipo"]:checked').value,
+      hermanos: h, edades: limpia($('c-edades').value, 40), adulto: limpia($('c-adulto').value, 60) };
+    if (confAbierta) d.id = confAbierta.id;
+    if (await escribe(confAbierta ? 'conf_editar' : 'conf_agregar', d, confAbierta ? 'Confirmación corregida' : 'Confirmación anotada', 'e-conf')) {
+      if (!confAbierta) { ver = d.asiste ? 'si' : 'no'; lista(); }
+      confAbierta = null;
+    }
+  });
+
   /* ---------- Agregar invitados ---------- */
   function abreAgregar() { $('e-agregar').hidden = true; abre($('d-agregar')); $('nombres').focus(); }
   function nombresDe(txt) {
@@ -330,10 +370,11 @@
   /* ---------- Resumen para copiar ---------- */
   function resumen() {
     const E = R.E, L = ['Cumple de Gaetano: ' + FECHA_TXT];
-    L.push('Van ' + plural(R.ninos, 'niño', 'niños') + (R.hermanitos ? ' (' + plural(E.si.length, 'invitado', 'invitados') + ' y ' + plural(R.hermanitos, 'hermanito', 'hermanitos') + ')' : '') + '.');
+    L.push('Van ' + plural(R.ninos, 'niño', 'niños') + (R.hermanitos ? ' (' + plural(R.invNinos, 'invitado', 'invitados') + ' y ' + plural(R.hermanitos, 'hermanito', 'hermanitos') + ')' : '') + '.');
+    if (R.adultos) L.push('Adultos que confirmaron: ' + R.adultos + '.');
     if (E.no.length) L.push('No podrán ir: ' + E.no.length + '.');
     if (R.hayLista) L.push('Sin responder: ' + E.pend.length + '.');
-    if (E.si.length) { L.push('', 'VAN'); E.si.forEach(e => { const c = e.conf, h = c ? Number(c.hermanos) || 0 : 0; L.push('- ' + nom(e) + (h ? ' +' + plural(h, 'hermanito', 'hermanitos') + (c.edades ? ' (' + c.edades + ')' : '') : '') + (c && c.adulto ? ', acompaña ' + c.adulto : '')); }); }
+    if (E.si.length) { L.push('', 'VAN'); E.si.forEach(e => { const c = e.conf, h = c ? Number(c.hermanos) || 0 : 0; L.push('- ' + nom(e) + (esAdulto(c) ? ' (adulto)' : '') + (h ? ' +' + plural(h, 'hermanito', 'hermanitos') + (c.edades ? ' (' + c.edades + ')' : '') : '') + (c && c.adulto ? ', acompaña ' + c.adulto : '')); }); }
     if (E.no.length) { L.push('', 'NO PODRÁN IR'); E.no.forEach(e => L.push('- ' + nom(e))); }
     if (R.hayLista && E.pend.length) { L.push('', 'SIN RESPONDER'); E.pend.forEach(e => L.push('- ' + nom(e))); }
     return L.join('\n');

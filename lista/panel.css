@@ -1,0 +1,186 @@
+/* «Control de misión» · panel privado de confirmaciones de la Misión Gaetano 6.
+   Mismo sistema visual que la invitación (colores, letras y botones salen de ahí): una sola familia de páginas.
+   Unidad de espacio 8 px. Radios: 14 (controles), 22 (tarjetas y hojas), 999 (pastillas). */
+@font-face{font-family:"Bungee";src:url(f/bungee.woff2) format("woff2");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"Nunito";src:url(f/nunito.woff2) format("woff2");font-weight:200 1000;font-style:normal;font-display:swap}
+:root{
+  --cielo:#0B1238; --cielo-2:#18236A; --hoja:#121A4E;            /* fondo nocturno de la invitación */
+  --estrella:#FFD84D;                                            /* marca y foco */
+  --lima:#B4EC51; --lima-osc:#1E3A05; --lima-borde:#6C9C1F;      /* «van» y acción principal */
+  --rojo:#FF8A99;                                                /* «no van» (aclarado para leerse sobre el azul) */
+  --celeste:#7CCBFF;                                             /* enlaces */
+  --tinta:#F5F7FF; --tinta-2:#BFC6EE;                            /* texto y texto secundario */
+  --panel:rgba(255,255,255,.07); --borde:rgba(255,255,255,.16);
+  --f-dis:"Bungee","Arial Black",Impact,sans-serif;              /* cifras y títulos, como en la invitación */
+  --f-txt:"Nunito",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --r-1:14px; --r-2:22px;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{background:var(--cielo);-webkit-text-size-adjust:100%}
+body{margin:0;min-height:100vh;color:var(--tinta);font-family:var(--f-txt);font-weight:600;font-size:1rem;line-height:1.45;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+h1,h2,p,ul{margin:0}
+ul{padding:0;list-style:none}
+button,input,textarea{font:inherit;color:inherit}
+button{-webkit-tap-highlight-color:transparent}
+.oculto-v{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.salta{position:absolute;left:8px;top:-60px;z-index:20;background:var(--estrella);color:#141433;padding:10px 14px;border-radius:var(--r-1);font-weight:800}
+.salta:focus{top:8px}
+:focus-visible{outline:3px solid var(--estrella);outline-offset:3px}
+
+/* Cielo: el mismo azul de la invitación, con estrellas quietas (es una herramienta: nada se mueve de fondo). */
+.cielo{position:fixed;inset:0;z-index:0;pointer-events:none;background:
+  radial-gradient(1.6px 1.6px at 9% 12%,#fff 50%,transparent 52%),radial-gradient(1.1px 1.1px at 23% 31%,#fff 50%,transparent 52%),
+  radial-gradient(1.4px 1.4px at 38% 8%,#fff 50%,transparent 52%),radial-gradient(1px 1px at 52% 22%,#fff 50%,transparent 52%),
+  radial-gradient(1.7px 1.7px at 67% 13%,var(--estrella) 50%,transparent 52%),radial-gradient(1.1px 1.1px at 81% 27%,#fff 50%,transparent 52%),
+  radial-gradient(1.3px 1.3px at 93% 9%,#fff 50%,transparent 52%),radial-gradient(1px 1px at 14% 55%,#fff 50%,transparent 52%),
+  radial-gradient(1.4px 1.4px at 88% 49%,#fff 50%,transparent 52%),radial-gradient(1px 1px at 6% 81%,#fff 50%,transparent 52%),
+  radial-gradient(1.5px 1.5px at 31% 73%,#fff 50%,transparent 52%),radial-gradient(1.1px 1.1px at 59% 88%,#fff 50%,transparent 52%),
+  radial-gradient(1.6px 1.6px at 77% 71%,var(--celeste) 50%,transparent 52%),radial-gradient(1px 1px at 95% 86%,#fff 50%,transparent 52%),
+  radial-gradient(120% 70% at 50% 0%,var(--cielo-2) 0%,var(--cielo) 62%)}
+
+.col{position:relative;z-index:1;max-width:480px;margin:0 auto;display:flex;flex-direction:column;gap:24px;
+  padding:20px max(16px,env(safe-area-inset-right,0px)) 56px max(16px,env(safe-area-inset-left,0px))}
+
+/* Cabecera: la foto del cumpleañero manda (grande, como un parche del traje), no un circulito. */
+.cab{display:flex;align-items:center;gap:18px}
+.retrato{position:relative;flex:none;width:104px;height:104px;transform:rotate(-4deg)}
+.retrato img{display:block;width:100%;height:100%;object-fit:cover;border-radius:26px;box-shadow:0 0 0 3px rgba(255,255,255,.92),0 2px 4px rgba(0,0,0,.4),0 18px 34px -14px rgba(0,0,0,.85)}
+.seis{position:absolute;left:-13px;bottom:-12px;font-family:var(--f-dis);font-size:2.3rem;line-height:1;color:var(--lima);text-shadow:0 3px 0 var(--lima-osc),0 0 14px rgba(11,18,56,.9);transform:rotate(-10deg)}
+.cab-txt{min-width:0;display:flex;flex-direction:column;gap:4px}
+.ceja{font-family:var(--f-dis);font-size:.72rem;letter-spacing:.14em;color:var(--estrella)}
+h1{font-family:var(--f-dis);font-weight:400;font-size:clamp(1.45rem,6.6vw,1.9rem);line-height:1.04;text-wrap:balance}
+.cuando{color:var(--tinta-2);font-size:.95rem}
+.cuando b{color:var(--tinta);font-weight:800}
+
+/* La órbita: cuántos niños van (cifra) y cuánto falta por responder (el cohete marca el avance). */
+.resumen{display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center}
+.orbita{position:relative;width:min(100%,250px);aspect-ratio:1/1}
+.anillo{display:block;width:100%;height:100%;overflow:visible}
+.pista{fill:none;stroke:rgba(255,255,255,.14);stroke-width:14}
+.sin-total .pista{stroke-dasharray:2 7;stroke-width:5;stroke-linecap:round;stroke:rgba(255,255,255,.3)}
+.arco{fill:none;stroke-width:14;transition:opacity .5s ease}
+.arco-si{stroke:var(--lima)}
+.arco-no{stroke:var(--rojo)}
+.nave{transform-origin:125px 125px;transition:transform .9s cubic-bezier(.2,.8,.2,1)}
+.espera .arco{opacity:0}
+.espera .nave{transition:none}
+.centro{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;pointer-events:none}
+.centro b{font-family:var(--f-dis);font-weight:400;font-size:4.6rem;line-height:.95;color:var(--lima);font-variant-numeric:tabular-nums lining-nums;text-shadow:0 4px 0 var(--lima-osc)}
+.centro span{font-weight:800;font-size:1.02rem}
+.desglose{font-weight:800;font-size:1.05rem;min-height:1.45em}
+.avance{color:var(--tinta-2);font-size:.95rem;min-height:1.45em}
+
+/* Los tres montones: son a la vez el resumen y el filtro de la lista. */
+.filtros{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.filtro{appearance:none;cursor:pointer;min-height:76px;padding:10px 4px 9px;border-radius:var(--r-1);border:2px solid var(--borde);background:var(--panel);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;transition:transform .14s ease}
+.filtro:active{transform:scale(.96)}
+.filtro b{font-family:var(--f-dis);font-weight:400;font-size:1.7rem;line-height:1.05;font-variant-numeric:tabular-nums lining-nums}
+.filtro span{font-size:.84rem;font-weight:800;color:var(--tinta-2)}
+.filtro[data-ver="si"] b{color:var(--lima)}
+.filtro[data-ver="pend"] b{color:var(--estrella)}
+.filtro[data-ver="no"] b{color:var(--rojo)}
+.filtro[aria-pressed="true"]{background:rgba(255,255,255,.14);border-color:var(--tinta)}
+.filtro[aria-pressed="true"] span{color:var(--tinta)}
+
+.busca{display:block}
+.busca input{width:100%;min-height:48px;padding:0 16px;border-radius:var(--r-1);border:2px solid var(--borde);background:rgba(5,8,28,.45);font-size:1rem;font-weight:700}
+.busca input::placeholder{color:var(--tinta-2);opacity:.8}
+
+/* Lista: frases como las diría Marina, no fichas con etiquetas. */
+.lista{display:flex;flex-direction:column;gap:8px}
+.lista li{display:flex;align-items:stretch;gap:8px}
+.fila{flex:1;min-width:0}
+.fila.pend{align-items:center;min-height:56px}
+.fila.pend .punto{margin-top:0}
+.mini{appearance:none;cursor:pointer;flex:none;min-height:56px;padding:0 16px;border-radius:var(--r-1);border:0;background:rgba(180,236,81,.16);box-shadow:inset 0 0 0 1.5px rgba(180,236,81,.55);color:var(--lima);font-weight:800;font-size:.95rem;transition:transform .14s ease}
+.mini:hover{background:rgba(180,236,81,.26)}
+.mini:active{transform:scale(.96)}
+.fila{appearance:none;cursor:pointer;text-align:left;display:grid;grid-template-columns:auto 1fr auto;align-items:start;gap:4px 12px;
+  padding:13px 12px 13px 14px;border-radius:var(--r-1);border:1px solid var(--borde);background:var(--panel);transition:transform .14s ease}
+.fila:hover{background:rgba(255,255,255,.11)}
+.fila:active{transform:scale(.985)}
+.punto{width:12px;height:12px;border-radius:50%;margin-top:7px;background:var(--estrella)}
+.fila.si .punto{background:var(--lima)}
+.fila.no .punto{background:var(--rojo)}
+.fila.pend .punto{background:transparent;box-shadow:inset 0 0 0 2px var(--estrella)}
+.dato{min-width:0;display:flex;flex-direction:column;gap:1px}
+.nombre{font-weight:800;font-size:1.08rem;line-height:1.25;overflow-wrap:anywhere}
+.frase{color:var(--tinta)}
+.extra{color:var(--tinta-2);font-size:.92rem;overflow-wrap:anywhere}
+.lado{display:flex;flex-direction:column;align-items:flex-end;gap:4px;padding-top:3px;color:var(--tinta-2);font-size:.82rem;white-space:nowrap}
+.nueva{font-family:var(--f-dis);font-size:.62rem;letter-spacing:.06em;color:#141433;background:var(--estrella);padding:3px 8px;border-radius:999px}
+.fuera{align-self:flex-start;margin-top:3px;font-size:.8rem;font-weight:800;color:var(--estrella);box-shadow:inset 0 0 0 1.5px rgba(255,216,77,.6);padding:1px 9px;border-radius:999px}
+.vacio{border:2px dashed rgba(255,255,255,.28);border-radius:var(--r-2);padding:22px 18px;text-align:center;color:var(--tinta-2);display:flex;flex-direction:column;align-items:center;gap:14px}
+.vacio b{color:var(--tinta);font-size:1.08rem}
+.hueso{height:74px;border-radius:var(--r-1);background:var(--panel);border:1px solid var(--borde);animation:late 1.2s ease-in-out infinite alternate}
+@keyframes late{from{opacity:.45}to{opacity:.9}}
+
+/* Botones: los de la invitación. */
+.btn{appearance:none;border:0;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:54px;padding:0 24px;border-radius:999px;
+  font-family:var(--f-dis);font-size:.95rem;letter-spacing:.02em;text-align:center;transition:transform .15s ease}
+.btn:active{transform:translateY(2px) scale(.98)}
+.btn-lima{background:var(--lima);color:var(--lima-osc);box-shadow:0 5px 0 var(--lima-borde),0 14px 28px -10px rgba(180,236,81,.5)}
+.btn-lima:active{box-shadow:0 2px 0 var(--lima-borde)}
+.btn-linea{background:transparent;color:var(--tinta);box-shadow:inset 0 0 0 2px var(--borde)}
+.btn-linea:hover{box-shadow:inset 0 0 0 2px var(--tinta-2)}
+.btn[disabled]{opacity:.55;cursor:default}
+.acciones{display:flex;flex-direction:column;gap:12px}
+.pie{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:4px 16px;color:var(--tinta-2);font-size:.9rem;text-align:center}
+.enlace{appearance:none;background:none;border:0;padding:12px 4px;min-height:44px;cursor:pointer;color:var(--celeste);font-weight:800;text-decoration:underline;text-underline-offset:3px}
+.pie .mal{color:var(--estrella);font-weight:800}
+
+/* Hojas (ventanas que suben desde abajo en el celular). */
+dialog{border:0;padding:0;color:var(--tinta);background:var(--hoja);width:100%;max-width:480px;margin:auto auto 0;border-radius:var(--r-2) var(--r-2) 0 0;
+  max-height:88vh;overflow:auto;box-shadow:0 0 0 1px var(--borde),0 -4px 10px rgba(0,0,0,.3),0 -30px 70px -20px rgba(0,0,0,.8)}
+dialog::backdrop{background:rgba(5,8,28,.78)}
+dialog[open]{animation:sube .26s cubic-bezier(.2,.8,.2,1)}
+@keyframes sube{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
+.hoja{display:flex;flex-direction:column;gap:14px;padding:22px 18px max(22px,env(safe-area-inset-bottom,0px))}
+h2{font-family:var(--f-dis);font-weight:400;font-size:1.3rem;line-height:1.1;overflow-wrap:anywhere}
+.hoja p{color:var(--tinta-2)}
+.hoja .estado{color:var(--tinta);font-weight:700}
+textarea,.campo{width:100%;padding:13px 14px;border-radius:var(--r-1);border:2px solid var(--borde);background:rgba(5,8,28,.5);font-size:1rem;font-weight:700;line-height:1.5}
+textarea{min-height:176px;resize:vertical}
+.campo{min-height:50px}
+.rot{font-weight:800;font-size:.95rem}
+.error{color:var(--estrella)!important;font-weight:800}
+.par{display:grid;grid-template-columns:1fr 1.3fr;gap:10px}
+.opciones{display:flex;flex-direction:column;gap:8px}
+.op{appearance:none;cursor:pointer;width:100%;min-height:52px;text-align:left;padding:12px 16px;border-radius:var(--r-1);border:1px solid var(--borde);background:var(--panel);font-weight:800;font-size:1rem;
+  display:flex;flex-direction:column;gap:1px;transition:transform .14s ease}
+.op:hover{background:rgba(255,255,255,.12)}
+.op:active{transform:scale(.985)}
+.op small{font-weight:600;font-size:.88rem;color:var(--tinta-2)}
+.op.fuerte{background:var(--lima);color:var(--lima-osc);border-color:transparent}
+.op.fuerte small{color:#2F5208}
+.op.quita{color:var(--rojo)}
+.cierra{align-self:center}
+
+.aviso{position:fixed;left:50%;bottom:max(18px,env(safe-area-inset-bottom,0px));z-index:30;transform:translate(-50%,24px);opacity:0;pointer-events:none;
+  background:var(--tinta);color:#141433;font-weight:800;padding:11px 20px;border-radius:999px;box-shadow:0 2px 4px rgba(0,0,0,.3),0 16px 30px -10px rgba(0,0,0,.7);transition:transform .22s ease,opacity .22s ease;max-width:calc(100vw - 32px);text-align:center}
+.aviso.ver{transform:translate(-50%,0);opacity:1}
+
+/* Puerta: la página es privada. */
+.puerta{position:relative;z-index:1;max-width:420px;margin:0 auto;min-height:100vh;padding:28px 20px;display:flex;flex-direction:column;justify-content:center;gap:18px}
+.puerta .retrato{align-self:flex-start;margin-bottom:6px}
+.puerta p{color:var(--tinta-2)}
+.puerta form{display:flex;flex-direction:column;gap:12px}
+
+.sin-js{position:relative;z-index:1;max-width:420px;margin:0 auto;padding:40px 20px;font-weight:800}
+
+@media (min-width:900px){
+  .col{max-width:1000px;display:grid;grid-template-columns:360px 1fr;column-gap:56px;align-items:start;padding-top:44px}
+  .izq{position:sticky;top:36px;display:flex;flex-direction:column;gap:24px}
+  .der{display:flex;flex-direction:column;gap:20px;min-width:0}
+  dialog{margin:auto;border-radius:var(--r-2)}
+  .acciones{flex-direction:row}
+  .acciones .btn{flex:1}
+}
+@media (max-width:899px){.izq,.der{display:contents}}
+@media (max-width:350px){.retrato{width:84px;height:84px}.centro b{font-size:3.9rem}.filtro span{font-size:.76rem}}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}

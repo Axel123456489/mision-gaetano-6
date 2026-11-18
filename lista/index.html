@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src https://n8n.mygisselle.com; base-uri 'none'; form-action 'none'">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#0B1238">
+<title>Control de misión · Gaetano 6</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='5' fill='%230B1238'/%3E%3Cpath fill='%23FFD84D' d='M12 3.5l2.4 5.3 5.8.6-4.4 3.8 1.3 5.7L12 16l-5.1 2.9 1.3-5.7L3.8 9.4l5.8-.6z'/%3E%3C/svg%3E">
+<link rel="preload" href="f/nunito.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="f/bungee.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="panel.css?v=1">
+<script src="panel.js?v=1" defer></script>
+</head>
+<body>
+<a class="salta" href="#lista">Saltar a la lista</a>
+<div class="cielo" aria-hidden="true"></div>
+
+<!-- Panel -->
+<main class="col" id="app" hidden>
+  <div class="izq">
+    <header class="cab">
+      <div class="retrato"><img src="gaetano.jpg" width="288" height="288" alt="Gaetano"><span class="seis" aria-hidden="true">6</span></div>
+      <div class="cab-txt">
+        <p class="ceja">Misión Gaetano 6</p>
+        <h1>Control de misión</h1>
+        <p class="cuando"><b id="faltan"></b> <span id="fecha">Sábado 5 de diciembre, 11:00 a. m.</span></p>
+      </div>
+    </header>
+
+    <section class="resumen" aria-labelledby="t-res">
+      <h2 class="oculto-v" id="t-res">Resumen</h2>
+      <div class="orbita espera" id="orbita">
+        <svg class="anillo" viewBox="0 0 250 250" aria-hidden="true">
+          <circle class="pista" cx="125" cy="125" r="104"/>
+          <g transform="rotate(-90 125 125)">
+            <circle class="arco arco-si" id="arco-si" cx="125" cy="125" r="104" pathLength="100" stroke-dasharray="0 100"/>
+            <circle class="arco arco-no" id="arco-no" cx="125" cy="125" r="104" pathLength="100" stroke-dasharray="0 100"/>
+          </g>
+          <g class="nave" id="nave">
+            <g transform="translate(125 21)">
+              <path fill="#FFD84D" d="M-13-4.5-25 0l12 4.5z"/>
+              <path fill="#FF8A99" d="M-12-6-19-13v9zM-12 6l-7 7V4z"/>
+              <path fill="#F5F7FF" d="M-13 0c0-6.5 9-10 21-10 6 3.2 9 6.6 9 10s-3 6.8-9 10c-12 0-21-3.5-21-10z"/>
+              <circle fill="#18236A" cx="5" cy="0" r="4.2"/>
+              <circle fill="#7CCBFF" cx="5" cy="0" r="2.8"/>
+            </g>
+          </g>
+        </svg>
+        <div class="centro"><b id="n-ninos">0</b><span id="t-ninos">niños van</span></div>
+      </div>
+      <p class="desglose" id="desglose"></p>
+      <p class="avance" id="avance"></p>
+    </section>
+  </div>
+
+  <div class="der">
+    <div class="filtros" role="group" aria-label="Qué lista ver">
+      <button class="filtro" type="button" data-ver="si" aria-pressed="true"><b id="c-si">0</b><span>Van</span></button>
+      <button class="filtro" type="button" data-ver="pend" aria-pressed="false"><b id="c-pend">–</b><span>Sin responder</span></button>
+      <button class="filtro" type="button" data-ver="no" aria-pressed="false"><b id="c-no">0</b><span>No van</span></button>
+    </div>
+
+    <label class="busca" id="busca-caja" hidden><span class="oculto-v">Buscar por nombre</span><input id="busca" type="search" placeholder="Buscar un nombre" autocomplete="off" enterkeyhint="search"></label>
+
+    <h2 class="oculto-v" id="t-lista" tabindex="-1">Lista</h2>
+    <ul class="lista" id="lista" aria-labelledby="t-lista"></ul>
+    <div class="vacio" id="vacio" hidden></div>
+
+    <div class="acciones">
+      <button class="btn btn-lima" type="button" id="b-agregar">Agregar invitados</button>
+      <button class="btn btn-linea" type="button" id="b-copiar">Copiar resumen</button>
+    </div>
+    <p class="pie"><span id="act" role="status"></span><button class="enlace" type="button" id="b-act">Actualizar</button><button class="enlace" type="button" id="b-salir">Salir en este teléfono</button></p>
+  </div>
+</main>
+
+<!-- Puerta: sin llave no se ve nada -->
+<main class="puerta" id="puerta" hidden>
+  <div class="retrato"><img src="gaetano.jpg" width="288" height="288" alt="Gaetano"><span class="seis" aria-hidden="true">6</span></div>
+  <p class="ceja">Misión Gaetano 6</p>
+  <h1>Control de misión</h1>
+  <p>Esta página es privada. Ábrela con tu enlace de acceso, o pégalo aquí.</p>
+  <form id="f-llave" novalidate>
+    <label class="rot" for="llave">Tu enlace de acceso</label>
+    <input class="campo" id="llave" type="text" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="Pega aquí tu enlace">
+    <p class="error" id="e-llave" role="alert" hidden></p>
+    <button class="btn btn-lima" type="submit" id="ok-llave">Entrar</button>
+  </form>
+</main>
+
+<!-- Agregar invitados -->
+<dialog id="d-agregar" aria-labelledby="t-agregar">
+  <form class="hoja" id="f-agregar" novalidate>
+    <h2 id="t-agregar">Agregar invitados</h2>
+    <p>Escribe o pega los nombres, uno por línea. Así verás quién falta responder.</p>
+    <label class="oculto-v" for="nombres">Nombres de los invitados, uno por línea</label>
+    <textarea id="nombres" autocomplete="off" autocapitalize="words" spellcheck="false" placeholder="Mateo&#10;Lucía Pérez&#10;María José"></textarea>
+    <p class="error" id="e-agregar" role="alert" hidden></p>
+    <div class="par">
+      <button class="btn btn-linea" type="button" data-cerrar>Cancelar</button>
+      <button class="btn btn-lima" type="submit" id="ok-agregar">Agregar</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Ficha de una persona y sus opciones -->
+<dialog id="d-ficha" aria-labelledby="t-ficha">
+  <div class="hoja">
+    <h2 id="t-ficha" tabindex="-1"></h2>
+    <p class="estado" id="ficha-estado"></p>
+    <p id="ficha-extra" hidden></p>
+    <form id="f-nombre" novalidate hidden>
+      <label class="rot" for="nombre-nuevo">Nombre</label>
+      <input class="campo" id="nombre-nuevo" type="text" autocomplete="off" autocapitalize="words" maxlength="40">
+      <div class="par">
+        <button class="btn btn-linea" type="button" id="no-nombre">Cancelar</button>
+        <button class="btn btn-lima" type="submit">Guardar</button>
+      </div>
+    </form>
+    <div class="opciones" id="ficha-op"></div>
+    <p class="error" id="e-ficha" role="alert" hidden></p>
+    <button class="enlace cierra" type="button" data-cerrar>Cerrar</button>
+  </div>
+</dialog>
+
+<div class="aviso" id="aviso" role="status" aria-live="polite"></div>
+<noscript><p class="sin-js">Esta página necesita JavaScript para mostrar la lista.</p></noscript>
+</body>
+</html>

@@ -9,6 +9,7 @@
   --lima:#B4EC51; --lima-osc:#1E3A05; --lima-borde:#6C9C1F;      /* «van» y acción principal */
   --rojo:#FF8A99;                                                /* «no van» (aclarado para leerse sobre el azul) */
   --celeste:#7CCBFF;                                             /* enlaces */
+  --lila:#C9A7FF;                                                /* adultos que confirmaron (cuadrito aparte, pedido de José 18-nov) */
   --tinta:#F5F7FF; --tinta-2:#BFC6EE;                            /* texto y texto secundario */
   --panel:rgba(255,255,255,.07); --borde:rgba(255,255,255,.16);
   --f-dis:"Bungee","Arial Black",Impact,sans-serif;              /* cifras y títulos, como en la invitación */
@@ -106,6 +107,9 @@ h1{font-family:var(--f-dis);font-weight:400;font-size:clamp(1.45rem,6.6vw,1.9rem
 .fila.si .punto{background:var(--lima)}
 .fila.no .punto{background:var(--rojo)}
 .fila.pend .punto{background:transparent;box-shadow:inset 0 0 0 2px var(--estrella)}
+/* Adulto (solo adultos, no cuenta entre los niños): el cuadrito entero va en lila para verlo de un vistazo. El punto sigue diciendo si va o no. */
+.fila.adulto{background:rgba(150,100,255,.32);border-color:var(--lila);box-shadow:inset 0 0 0 1px var(--lila)}   /* borde de 2 px sin mover el texto */
+.fila.adulto:hover{background:rgba(150,100,255,.42)}
 .dato{min-width:0;display:flex;flex-direction:column;gap:1px}
 .nombre{font-weight:800;font-size:1.08rem;line-height:1.25;overflow-wrap:anywhere}
 .frase{color:var(--tinta)}
@@ -186,7 +190,7 @@ textarea{min-height:176px;resize:vertical}
 }
 /* Marca «Adulto» en la fila (versión 3): pastilla chica, color de tinta suave; no compite con el nombre. */
 .tipo-adulto { display: inline-block; margin: 2px 0 0; padding: 1px 8px; border-radius: 999px; font-size: .75rem; font-weight: 800; letter-spacing: .02em;
-  color: #0B1238; background: #BFC6EE; width: max-content; }
+  color: #0B1238; background: var(--lila); width: max-content; }
 /* Anotar o corregir una confirmación (versión 3): opciones grandes para el dedo. */
 .elige{border:0;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
 .elige legend{width:100%;padding:0;margin-bottom:8px}

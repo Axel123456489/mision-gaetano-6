@@ -176,7 +176,7 @@
     primera = false;
   }
   function fila(e) {
-    const li = el('li'), b = el('button', 'fila ' + e.clase), d = el('span', 'dato'), lado = el('span', 'lado');
+    const li = el('li'), b = el('button', 'fila ' + e.clase + (esAdulto(e.conf) ? ' adulto' : '')), d = el('span', 'dato'), lado = el('span', 'lado');   // adulto: cuadrito lila (José, 18-nov)
     b.type = 'button';
     d.appendChild(el('span', 'nombre', nom(e)));
     if (esAdulto(e.conf)) d.appendChild(el('span', 'tipo-adulto', 'Adulto'));

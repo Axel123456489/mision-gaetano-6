@@ -65,7 +65,7 @@
       const r = await fetch(API, { method: 'POST', body: new URLSearchParams({ k: llave, accion, datos: d ? JSON.stringify(d) : '' }), signal: c.signal, cache: 'no-store', credentials: 'omit', referrerPolicy: 'no-referrer', keepalive: accion !== 'ver' });
       const j = await r.json().catch(() => null);
       if (s !== sesion) throw vieja();
-      if (r.status === 403 || (j && j.error === 'llave')) { const e = new Error('llave'); e.llave = true; throw e; }
+      if (j && j.ok === false && j.error === 'llave') { const e = new Error('llave'); e.llave = true; throw e; }   // solo lo dice nuestro flujo; un 403 ajeno (filtro, red) no borra la llave
       if (!r.ok || !j || j.ok !== true) throw new Error('servidor');
       j.serie = n; return j;
     } catch (e) { throw s !== sesion ? vieja() : e; }
